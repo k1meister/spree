@@ -1,0 +1,9 @@
+<svg viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" aria-labelledby="pi-banktransfer">
+  <title id="pi-banktransfer">Bank Transfer</title>
+  <rect width="38" height="24" rx="2" fill="#142688"/>
+  <rect x="2" y="2" width="34" height="20" rx="1" fill="#fff"/>
+  <path d="M6 8 L12 8 M6 12 L18 12 M6 16 L15 16" stroke="#142688" stroke-width="2" stroke-linecap="round"/>
+  <path d="M28 8 L32 8 M28 12 L32 12 M28 16 L32 16" stroke="#142688" stroke-width="2" stroke-linecap="round"/>
+  <path d="M20 10 L24 12 L20 14" stroke="#142688" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+

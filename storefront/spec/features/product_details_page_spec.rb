@@ -309,11 +309,11 @@ RSpec.describe 'Product detail page', type: :feature do
             find_color_option('red').ancestor('label').click
             wait_for_turbo
 
-            click_on 'choose Size'
+            click_on Spree.t('storefront.variant_picker.please_choose', option_type: 'Size')
             find('label', text: 'M', visible: true).click
             wait_for_turbo
 
-            click_on 'choose Material'
+            click_on Spree.t('storefront.variant_picker.please_choose', option_type: 'Material')
             find('label', text: 'Wool', visible: true).click
             wait_for_turbo
 
@@ -328,11 +328,11 @@ RSpec.describe 'Product detail page', type: :feature do
           within turbo_frame do |_c|
             wait_for_turbo
 
-            click_on 'choose Size'
+            click_on Spree.t('storefront.variant_picker.please_choose', option_type: 'Size')
             find('label', text: 'M', visible: true).click
             wait_for_turbo
 
-            click_on 'choose Material'
+            click_on Spree.t('storefront.variant_picker.please_choose', option_type: 'Material')
             find('label', text: 'Wool', visible: true).click
             wait_for_turbo
 
@@ -377,12 +377,12 @@ RSpec.describe 'Product detail page', type: :feature do
             find_color_option('red').ancestor('label').click
             wait_for_turbo
 
-            click_on 'choose Size'
+            click_on Spree.t('storefront.variant_picker.please_choose', option_type: 'Size')
             find('label', text: 'M', visible: true).click
             wait_for_turbo
-            expect(c).not_to have_content 'Please choose Size', wait: 5.seconds
+            expect(c).not_to have_content Spree.t('storefront.variant_picker.please_choose', option_type: 'Size'), wait: 5.seconds
 
-            expect(c).to have_button 'Please choose Material'
+            expect(c).to have_button Spree.t('storefront.variant_picker.please_choose', option_type: 'Material')
           end
         end
       end
@@ -393,11 +393,11 @@ RSpec.describe 'Product detail page', type: :feature do
             find_color_option('red').ancestor('label').click
             wait_for_turbo
 
-            first('button', text: 'Please choose Size').click
+            first('button', text: Spree.t('storefront.variant_picker.please_choose', option_type: 'Size')).click
             find('label', text: 'M', visible: true).click
             wait_for_turbo
 
-            first('button', text: 'Please choose Material').click
+            first('button', text: Spree.t('storefront.variant_picker.please_choose', option_type: 'Material')).click
             find('label', text: 'Wool', visible: true).click
             wait_for_turbo
 
@@ -446,14 +446,14 @@ RSpec.describe 'Product detail page', type: :feature do
             find_color_option('black').ancestor('label').click
             wait_for_turbo
 
-            first('button', text: 'choose Size').click
+            first('button', text: Spree.t('storefront.variant_picker.please_choose', option_type: 'Size')).click
             find('label', text: 'Small: XS', visible: true).click
             wait_for_turbo
 
-            expect(c).to have_button 'choose Material', disabled: false, wait: 5.seconds
+            expect(c).to have_button Spree.t('storefront.variant_picker.please_choose', option_type: 'Material'), disabled: false, wait: 5.seconds
             # Close any open dropdowns first to avoid click interception
             page.execute_script("document.querySelectorAll('[data-dropdown-target=\"menu\"]').forEach(el => el.classList.add('hidden'))")
-            find('button', text: 'choose Material').click
+            find('button', text: Spree.t('storefront.variant_picker.please_choose', option_type: 'Material')).click
             find('label', text: 'Cotton', visible: true).click
             wait_for_turbo
 
@@ -478,11 +478,11 @@ RSpec.describe 'Product detail page', type: :feature do
             wait_for_turbo
 
             within '#product-variant-picker' do
-              click_on 'choose Size'
+              click_on Spree.t('storefront.variant_picker.please_choose', option_type: 'Size')
               find('label', text: 'L', visible: true).click
               wait_for_turbo
 
-              click_on 'choose Material'
+              click_on Spree.t('storefront.variant_picker.please_choose', option_type: 'Material')
               find('label', text: 'Silk', visible: true).click
             end
 
@@ -501,11 +501,11 @@ RSpec.describe 'Product detail page', type: :feature do
             wait_for_turbo
 
             within '#product-variant-picker' do
-              click_on 'choose Size'
+              click_on Spree.t('storefront.variant_picker.please_choose', option_type: 'Size')
               find('label', text: 'L', visible: true).click
               wait_for_turbo
 
-              click_on 'choose Material'
+              click_on Spree.t('storefront.variant_picker.please_choose', option_type: 'Material')
               find('label', text: 'Silk', visible: true).click
             end
 
@@ -529,12 +529,12 @@ RSpec.describe 'Product detail page', type: :feature do
             find_color_option('red').ancestor('label').click
             wait_for_turbo
 
-            click_on 'Please choose Size'
+            click_on Spree.t('storefront.variant_picker.please_choose', option_type: 'Size')
             find('label', text: 'M', visible: true).click
             wait_for_turbo
-            expect(c).not_to have_content 'Please choose Size', wait: 5.seconds
+            expect(c).not_to have_content Spree.t('storefront.variant_picker.please_choose', option_type: 'Size'), wait: 5.seconds
 
-            first('button', text: 'Please choose Material').click
+            first('button', text: Spree.t('storefront.variant_picker.please_choose', option_type: 'Material')).click
             find('label', text: 'Wool', visible: true).click
             wait_for_turbo
 

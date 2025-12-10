@@ -1,0 +1,187 @@
+---
+tr:
+  spree:
+    i18n:
+      this_file_language: Türkçe
+    storefront:
+      go_to_shop: "MAĞAZAYA GİT"
+      featured: "ÖNE ÇIKANLAR"
+      collections: "KOLEKSİYONLAR"
+      our_selection: "SEÇİMİMİZ"
+      news: "HABERLER"
+      go_to_blog: "BLOGA GİT"
+      read_blog: "BLOGU OKU"
+      available_now: "HEMEN MEVCUT"
+      products:
+        new_arrival: "YENİ GELEN"
+        sold: "Satıldı"
+        only_stocks_left: "Sadece %{count} adet kaldı!"
+        description: "AÇIKLAMA"
+        details: "DETAYLAR"
+        sent_from: "%{location} adresinden gönderilir."
+        estimated_shipping: "Tahmini Kargo"
+        shipping_details: "Kargo detayları"
+        original_product: "100% Orijinal Ürün"
+        read_more: "Devamını oku"
+    reviews:
+      title: "Değerlendirmeler"
+      count: "yorum"
+      write_review: "Yorum Yaz"
+      rating: "Puan"
+      title_label: "Başlık"
+      review_label: "Yorumunuz"
+      submit: "Yorumu Gönder"
+      login_required: "Yorum yazmak için lütfen giriş yapın."
+      login: "Giriş Yap"
+      already_reviewed: "Bu ürün için zaten bir yorum bıraktınız."
+      pending_approval: "Onay bekliyor"
+      successfully_submitted: "Yorumunuz başarıyla gönderildi. Onaylandıktan sonra yayınlanacaktır."
+      helpful: "Yararlı"
+      questions: "Sorular"
+      ask_question: "Soru Sor"
+      ask_on_whatsapp: "WhatsApp ile Sor"
+      no_questions: "Henüz soru sorulmamış"
+      filter_by: "Değerlendirme önemine göre filtrele:"
+      athlete_type: "Sporcu Tipi"
+      body_type: "Vücut Tipi"
+      size_purchased: "Satın Alınan Beden"
+      all_ratings: "Tüm Puanlar"
+      best_ratings: "En İyiler"
+      worst_ratings: "En Kötüler"
+      search: "Ara:"
+      sort_by: "Sırala:"
+      most_recent: "En Yeni"
+      most_relevant: "En İlgili"
+      most_helpful: "En Yararlı"
+      ratings: "değerlendirme"
+      reviews: "Değerlendirmeler"
+      no_reviews: "Henüz değerlendirme yok"
+      be_first: "İlk değerlendirmeyi siz yapın!"
+      title_placeholder: "Değerlendirmenize bir başlık verin"
+      review_placeholder: "Ürün hakkındaki düşüncelerinizi paylaşın..."
+      login_description: "Ürün hakkındaki görüşlerinizi paylaşmak için hesabınıza giriş yapmanız gerekiyor."
+      recommends: "Bu ürünü öneriyor"
+      gender: "Cinsiyet"
+      female: "Kadın"
+      casual: "Günlük"
+      height: "Boy"
+      athletic: "Atletik"
+      runs_small: "Küçük Gelir"
+      fit: "Uyum"
+      runs_large: "Büyük Gelir"
+      min: "Min."
+      comfort: "Rahatlık"
+      max: "Max."
+      performance: "Performans"
+      ago: "önce"
+      was_helpful: "Bu yorum yararlı mıydı?"
+      reviews: "Değerlendirme"
+      worst_ratings: "En Olumsuzlar"
+      size_fit: "Beden Uyumu"
+      size_fit_runs_small: "Küçük Gelir"
+      size_fit_fit: "Uygun"
+      size_fit_runs_large: "Büyük Gelir"
+      select_size_fit: "Seçiniz"
+      usage_type: "Kullanım Tipi"
+      usage_type_daily: "Günlük Kullanım"
+      usage_type_racing: "Yarış"
+      usage_type_off_road: "Off-Road"
+      usage_type_touring: "Touring"
+      select_usage_type: "Seçiniz"
+      experience_level: "Deneyim Seviyesi"
+      experience_level_beginner: "Başlangıç"
+      experience_level_intermediate: "Orta"
+      experience_level_advanced: "İleri"
+      experience_level_expert: "Uzman"
+      select_experience_level: "Seçiniz"
+      images: "Resimler (İsteğe Bağlı)"
+      images_help: "Birden fazla resim seçebilirsiniz"
+      account:
+        change_password: Şifre değiştir
+        newsletter_settings: Bülten ayarları
+        no_addresses_description: Bir sipariş verdiğinizde, adres detaylarınızı burada bulacaksınız.
+        no_addresses_title: Şu anda hiç adresiniz yok
+        no_gift_cards: Şu anda hiç hediye kartınız yok
+        no_orders_description: Bir sipariş verdiğinizde, detayları burada bulacaksınız.
+        no_orders_title: Şu anda hiç siparişiniz yok
+        no_store_credits: Hiç mağaza krediniz yok.
+        personal_details: Kişisel bilgiler
+        please_update_your_contact_details: Lütfen iletişim bilgilerinizi güncelleyin
+        store_credits_history: Mağaza kredisi geçmişi
+      cart:
+        items_in_cart: Sepetteki ürünler
+        shipping_and_taxes_calculated_at_checkout: Kargo ve vergiler ödeme sayfasında hesaplanır
+        view_bag: Sepeti görüntüle
+      checkout:
+        all_transactions_are_secure_and_encrypted: Tüm işlemler güvenli ve şifrelenmiştir
+        already_have_an_account: Zaten bir hesabınız var mı?
+        backorder_notice: 'Sepetinizdeki bazı ürünler, siparişinizin geri kalanından biraz daha sonra gönderilecektir:'
+        by_placing_this_order_you_agree_to: Bu siparişi vererek kabul ediyorsunuz
+        calculated_at_next_step: Bir sonraki adımda hesaplanır
+        continue_to_cart: Sepete devam et
+        continue_to_checkout: Ödemeye devam et
+        delivery_method: Teslimat yöntemi
+        errors:
+          invalid_line_items:
+            one: Bu ürün sepetinizden çıkarılacaktır çünkü adresiniz için teslimat yöntemi bulunmamaktadır.
+            other: Bu %{count} ürün sepetinizden çıkarılacaktır çünkü adresiniz için teslimat yöntemi bulunmamaktadır.
+        gift_card_amount_applied: Hediye Kartı %{code} siparişinize %{amount} uygulandı.
+        it_seems_you_already_have_an_account_html: Görünüşe göre bizimle zaten bir hesabınız var. Devam etmek için lütfen %{link}.
+        or_continue_below: veya aşağıdan devam edin
+        order_already_paid: Ödemeniz gerekmiyor, sadece siparişi onaylamak için Şimdi yerleştir butonuna tıklayın.
+        order_success: Siparişiniz onaylandı!
+        order_success_message: Siparişiniz hazır olduğunda, e-posta onayı alacaksınız.
+        payment_processing_message: Ödemeniz işlendiğinde e-posta onayı alacaksınız.
+        return_to_cart: Sepete dön
+        shipping_not_available: Kargo mevcut değil
+        signup_for_an_account: Gelecekteki alışverişleriniz için daha hızlı, sipariş takibi ve daha fazlası için bir hesap oluşturun.
+        special_instructions_placeholder: Buraya siparişiniz için özel talimatlar ekleyebilirsiniz
+        store_credits_amount_applied: Siparişinize %{amount} mağaza kredisi uyguladınız.
+        thanks_for_your_order: "%{name}, siparişiniz için teşekkürler!"
+        you_will_need_to_pay_only: Sadece seçtiğiniz ödeme yöntemiyle %{amount} ödemeniz gerekecek.
+      contacts:
+        customer_support_email_not_configured: Müşteri destek e-postası yapılandırılmamış
+        message_not_sent: Maalesef şu anda e-postayı gönderemedik. Lütfen daha sonra tekrar deneyin
+        message_sent: Mesaj gönderildi!
+      newsletter_subscribers:
+        already_subscribed: Zaten bültenimize abonesiniz
+        success: Bültenimize abone olduğunuz için teşekkürler!
+        verification_failed: Doğrulama başarısız
+        verified: E-postanız doğrulandı!
+      newsletter_subscription:
+        description: Ayarlarınızın kontrolünü elinize alın ve deneyiminizi tercihlerinize göre özelleştirin. Bildirimlerinizi ihtiyaçlarınıza göre özelleştirin.
+        join: Yeni ürünler, indirimler ve daha fazlası hakkında e-posta alın. İstediğiniz zaman abonelikten çıkabilirsiniz.
+        status: Şu anda bültenlere %{status} durumundasınız.
+      products:
+        pinch_to_zoom_html: Yakınlaştırmak için<br>sıkıştırın
+        primary_image: birincil resim
+        secondary_image: ikincil resim
+      refund_action_not_required_message:
+        order_canceled:
+          fully: Bu sipariş iptal edildi. Başka bir işlem gerekmez. Birkaç iş günü içinde geri ödeme alacaksınız.
+          partially: Bu sipariş kısmen iptal edildi. Başka bir işlem gerekmez. Birkaç iş günü içinde geri ödeme alacaksınız.
+        order_refunded:
+          fully: Bu sipariş için geri ödeme yapıldı. Başka bir işlem gerekmez. Birkaç iş günü içinde geri ödeme alacaksınız.
+          partially: Bu sipariş için kısmen geri ödeme yapıldı. Başka bir işlem gerekmez. Birkaç iş günü içinde geri ödeme alacaksınız.
+      refund_action_required_message:
+        order_canceled:
+          fully: Bu sipariş iptal edildi. Seçilen ödeme yöntemiyle ödenen tutar birkaç iş günü içinde iade edilecektir. Yeni kupon almak için lütfen %{customer_support_email} ile iletişime geçin.
+          partially: Bu sipariş kısmen iptal edildi. Seçilen ödeme yöntemiyle ödenen tutar birkaç iş günü içinde iade edilecektir. Yeni kupon almak için lütfen %{customer_support_email} ile iletişime geçin.
+        order_refunded:
+          fully: Bu sipariş için geri ödeme yapıldı. Seçilen ödeme yöntemiyle ödenen tutar birkaç iş günü içinde iade edilecektir. Yeni kupon almak için lütfen %{customer_support_email} ile iletişime geçin.
+          partially: Bu sipariş için kısmen geri ödeme yapıldı. Seçilen ödeme yöntemiyle ödenen tutar birkaç iş günü içinde iade edilecektir. Yeni kupon almak için lütfen %{customer_support_email} ile iletişime geçin.
+      variant_picker:
+        please_choose: Lütfen %{option_type} seçin
+        please_choose_all_options: Lütfen tüm seçenekleri seçin
+        select_color: RENK SEÇİN
+        select_size: BEDEN SEÇİN
+      wished_items:
+        add: İstek listesine ekle
+        no_wished_items:
+          description: Henüz kaydedilmiş ürününüz yok.
+          title: Kaydedilmiş ürününüz yok
+        remove: İstek listesinden kaldır
+        remove_error: Bu ürünü zaten istek listenizden kaldırdınız
+        select_variant: İstek listesine eklemek için varyant seçin
+        unavailable: Mevcut değil
+

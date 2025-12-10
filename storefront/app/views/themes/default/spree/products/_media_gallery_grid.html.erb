@@ -1,0 +1,21 @@
+<% cache [*spree_storefront_base_cache_scope.call(product), images].compact do %>
+  <div class="product-images-grid" data-controller="lightbox">
+    <div class="grid grid-cols-2 gap-2 w-full">
+      <% images.first(6).each_with_index do |image, index| %>
+        <div class="product-image-item relative aspect-square overflow-hidden cursor-pointer group">
+          <%= link_to spree_image_url(image, width: 1000, height: 1000), 
+              data: { pswp_width: "2000", pswp_height: "2000" },
+              class: "block w-full h-full" do %>
+            <%= spree_image_tag(image, width: 500, height: 500, alt: image_alt(image), 
+                class: 'w-full h-full object-cover transition-transform duration-300 group-hover:scale-105') %>
+            <div class="zoom-icon absolute bottom-2 right-2 p-2 bg-white rounded-full opacity-0 group-hover:opacity-75 transition-opacity">
+              <%= render 'spree/shared/icons/zoom' %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+

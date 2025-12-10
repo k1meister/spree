@@ -119,6 +119,8 @@ module Spree
     has_many :store_products, class_name: 'Spree::StoreProduct'
     has_many :stores, through: :store_products, class_name: 'Spree::Store'
     has_many :digitals, through: :variants_including_master
+    has_many :reviews, -> { order(created_at: :desc) }, class_name: 'Spree::Review', dependent: :destroy, inverse_of: :product
+    has_many :approved_reviews, -> { approved.order(created_at: :desc) }, class_name: 'Spree::Review', inverse_of: :product
 
     after_initialize :ensure_master
     after_initialize :assign_default_tax_category
@@ -685,6 +687,22 @@ module Spree
       return unless Spree::Core::Engine.routes.url_helpers.respond_to?(:product_path)
 
       Spree::Core::Engine.routes.url_helpers.product_path(self)
+    end
+
+    def average_rating
+      return 0.0 if approved_reviews.empty?
+
+      approved_reviews.average(:rating).to_f.round(1)
+    end
+
+    def reviews_count
+      approved_reviews.count
+    end
+
+    def update_rating_cache
+      # This method can be used to cache rating calculations if needed
+      # For now, we'll calculate on the fly
+      # Called from Review model after create/update
     end
 
     private

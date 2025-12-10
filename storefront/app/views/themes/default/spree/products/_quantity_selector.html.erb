@@ -1,8 +1,8 @@
 <% selected_variant ||= nil %>
-<p class="quantity-selector-label text-sm tracking-widest uppercase pb-2"><%= Spree.t(:quantity) %></p>
+<p class="quantity-label text-xs uppercase tracking-wide pb-2"><%= Spree.t(:quantity) %></p>
 <div class="inline-block">
-  <div class="quantity-picker" data-controller="quantity-picker">
-    <%= button_tag class: 'decrease-quantity',
+  <div class="quantity-picker quantity-picker-custom" data-controller="quantity-picker">
+    <%= button_tag class: 'decrease-quantity quantity-btn-custom',
                      type: 'button',
                      data: { action: 'click->quantity-picker#decrease',
                             'quantity-picker-target': 'decrease' } do %>
@@ -11,10 +11,10 @@
     <%= number_field_tag :quantity, 1,
                           min: 1,
                           max: selected_variant&.backorderable? ? nil : selected_variant&.total_on_hand,
-                          class: 'quantity-input',
+                          class: 'quantity-input quantity-input-custom',
                           'aria-label': 'Quantity',
                           data: { 'quantity-picker-target': 'quantity' } %>
-    <%= button_tag class: 'increase-quantity',
+    <%= button_tag class: 'increase-quantity quantity-btn-custom',
                      type: 'button',
                      data: { action: 'click->quantity-picker#increase',
                             'quantity-picker-target': 'increase' } do %>

@@ -1,0 +1,51 @@
+---
+tr:
+  activerecord:
+    errors:
+      models:
+        spree/review:
+          attributes:
+            user_id:
+              already_reviewed: Bu ürün için zaten bir yorum bıraktınız
+  spree:
+    discount_percent: İndirim %
+    amount: Fiyat
+    compare_at_amount: Normal Fiyat
+    admin:
+      variants_form:
+        discount_percent_description: İndirim yüzdesi girerek otomatik olarak indirimli fiyat hesaplanır.
+      products:
+        variants:
+          bulk_update_prices: Tüm Varyantların Fiyatını Güncelle
+          bulk_update_prices_title: Tüm Varyantların Fiyatını Güncelle
+          bulk_price_placeholder: Fiyat girin
+          bulk_compare_at_placeholder: Normal fiyat girin
+          apply_to_all_variants: Tüm Varyantlara Uygula
+      reviews:
+        title: "Ürün Yorumları"
+        title_label: "Başlık"
+        product: "Ürün"
+        user: "Kullanıcı"
+        rating: "Puan"
+        status: "Durum"
+        approved: "Onaylandı"
+        pending: "Beklemede"
+        approve: "Onayla"
+        unapprove: "Onayı Kaldır"
+        unapprove_confirm: "Onayı kaldırmak istediğinize emin misiniz?"
+        edit: "Yorumu Düzenle"
+        review_label: "Yorum"
+        back: "Geri"
+      payment_methods:
+        store_credit_description: "Müşterilerin bakiye ile ödeme yapmasına izin verin. Admin panelinden müşterilere bakiye verin."
+        cash_description: "Müşterilerin nakit ödeme yapmasına izin verin."
+        store_pos_description: "Mağazadan lokal POS cihazı ile ödeme alın."
+        bank_transfer_description: "Müşterilerin banka havalesi ile ödeme yapmasına izin verin."
+    i18n:
+      this_file_language: Türkçe
+      available_locales: Mevcut Diller
+      country: Ülke
+      default_country: Varsayılan Ülke
+      fields: Alanlar
+      language: Dil
+

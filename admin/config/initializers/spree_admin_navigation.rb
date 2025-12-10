@@ -111,6 +111,14 @@ Rails.application.config.after_initialize do
                 url: :admin_properties_path,
                 position: 40,
                 if: -> { can?(:manage, Spree::Property) && Spree::Config.product_properties_enabled }
+
+    # Reviews
+    products.add :reviews,
+                label: 'admin.reviews.title',
+                url: :admin_reviews_path,
+                position: 50,
+                active: -> { controller_name == 'reviews' },
+                if: -> { can?(:manage, Spree::Review) }
   end
 
   # Vendors (Enterprise Edition)

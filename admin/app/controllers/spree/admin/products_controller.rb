@@ -200,7 +200,8 @@ module Spree
           @product_prices[price.variant.human_name] ||= {}
           @product_prices[price.variant.human_name][price.currency.downcase] = {
             id: price.id.to_s,
-            amount: price.amount
+            amount: price.amount,
+            compare_at_amount: price.compare_at_amount
           }
         end
 

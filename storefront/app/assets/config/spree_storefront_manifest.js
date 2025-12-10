@@ -4,3 +4,4 @@
 //= link_tree ../../../vendor/javascript .js
 
 //= link storefront_page_builder.css
+//= link_tree ../fonts .woff2

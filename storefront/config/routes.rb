@@ -9,6 +9,7 @@ Spree::Core::Engine.add_routes do
       member do
         get :related
       end
+      resources :reviews, only: [:create]
     end
     get '/t/*id', to: 'taxons#show', as: :nested_taxons
     get '/tx/:id', to: 'taxonomies#show', as: :taxonomy

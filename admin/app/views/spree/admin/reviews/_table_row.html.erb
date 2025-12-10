@@ -1,0 +1,50 @@
+<tr id="<%= spree_dom_id review %>" data-hook="admin_reviews_index_row">
+  <td>
+    <%= link_to review.title, spree.edit_admin_review_path(review) %>
+  </td>
+  <td>
+    <%= link_to review.product.name, spree.edit_admin_product_path(review.product) %>
+  </td>
+  <td>
+    <%= review.user.full_name || review.user.email %>
+  </td>
+  <td>
+    <div class="flex items-center">
+      <% review.rating.times do %>
+        <span class="text-yellow-400">★</span>
+      <% end %>
+      <% (5 - review.rating).times do %>
+        <span class="text-gray-300">☆</span>
+      <% end %>
+      <span class="ml-1">(<%= review.rating %>)</span>
+    </div>
+  </td>
+  <td>
+    <% if review.approved? %>
+      <span class="badge badge-success"><%= Spree.t('admin.reviews.approved', default: 'Onaylandı') %></span>
+    <% else %>
+      <span class="badge badge-warning"><%= Spree.t('admin.reviews.pending', default: 'Beklemede') %></span>
+    <% end %>
+  </td>
+  <td>
+    <%= local_time(review.created_at, format: :short) %>
+  </td>
+  <td class="actions" data-hook="admin_reviews_index_row_actions">
+    <span class="d-flex justify-content-end">
+      <% if review.approved? %>
+        <%= link_to_with_icon 'x-circle', Spree.t('admin.reviews.unapprove', default: 'Onayı Kaldır'),
+            spree.unapprove_admin_review_path(review),
+            class: 'btn btn-sm btn-warning',
+            data: { turbo_method: :put, turbo_confirm: Spree.t('admin.reviews.unapprove_confirm', default: 'Onayı kaldırmak istediğinize emin misiniz?') } %>
+      <% else %>
+        <%= link_to_with_icon 'check-circle', Spree.t('admin.reviews.approve', default: 'Onayla'),
+            spree.approve_admin_review_path(review),
+            class: 'btn btn-sm btn-success',
+            data: { turbo_method: :put } %>
+      <% end %>
+      <%= link_to_edit review, no_text: true, class: 'btn btn-sm btn-primary' %>
+      <%= link_to_delete review, no_text: true, class: 'btn btn-sm btn-danger' %>
+    </span>
+  </td>
+</tr>
+

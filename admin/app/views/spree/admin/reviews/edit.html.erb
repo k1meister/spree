@@ -1,0 +1,49 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.admin_reviews_path, @review %>
+  <%= Spree.t('admin.reviews.edit_review', default: 'Yorumu Düzenle') %> #<%= @review.id %>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @review } %>
+
+<%= form_for [:admin, @review] do |f| %>
+  <div class="card-lg">
+    <div class="card-body">
+      <div class="form-group">
+        <%= f.label :product_id, Spree.t('admin.reviews.product', default: 'Ürün') %>
+        <%= f.select :product_id, 
+            options_from_collection_for_select(Spree::Product.all, :id, :name, @review.product_id),
+            {}, { class: 'form-control', disabled: true } %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :user_id, Spree.t('admin.reviews.user', default: 'Kullanıcı') %>
+        <%= f.text_field :user_id, value: @review.user.full_name || @review.user.email, class: 'form-control', disabled: true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :rating, Spree.t('admin.reviews.rating', default: 'Puan') %>
+        <%= f.number_field :rating, min: 1, max: 5, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :title, Spree.t('admin.reviews.title_label', default: 'Başlık') %>
+        <%= f.text_field :title, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :review, Spree.t('admin.reviews.review_label', default: 'Yorum') %>
+        <%= f.text_area :review, rows: 5, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <div class="form-check">
+          <%= f.check_box :approved, class: 'form-check-input' %>
+          <%= f.label :approved, Spree.t('admin.reviews.approved', default: 'Onaylandı'), class: 'form-check-label' %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%= render 'spree/admin/shared/edit_resource_links', f: f %>
+<% end %>
+

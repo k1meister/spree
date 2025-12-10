@@ -1,32 +1,80 @@
+<%# Header modal %>
 <%= turbo_frame_tag :settings_modal do %>
   <div
     data-modal-target="container"
     data-action="click->modal#closeBackground keyup@window->modal#closeWithKeyboard"
-    class="currency-and-locale-modal hidden fixed inset-0 overflow-y-auto flex items-end md:items-start justify-center z-[9999] w-full"
+    class="currency-and-locale-modal hidden fixed inset-0 overflow-y-auto flex items-center justify-center z-[9999] w-full bg-black bg-opacity-50"
     style="animation-duration: 150ms;">
-    <div class="w-full lg:w-[600px] relative h-auto lg:max-h-screen flex justify-center flex-col gap-4 bg-background p-5 border border-default mt-12">
+    <div class="w-full max-w-md relative bg-white rounded-lg shadow-xl p-6 mx-4">
       <button
       type="button"
       data-action="modal#close"
-      class="absolute top-5 right-5">
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
         <%= render 'spree/shared/icons/close' %>
       </button>
-      <h3 class="text-lg font-bold"><%= Spree.t("i18n.localization_settings") %></h3>
-      <%= form_with url: spree.settings_path, method: :put, class: 'flex flex-col gap-4', data: {turbo: false} do |f| %>
+      <h3 class="text-lg font-semibold text-gray-900 mb-6"><%= Spree.t("i18n.localization_settings", default: "Select location and language") %></h3>
+      <%= form_with url: spree.settings_path, method: :put, class: 'flex flex-col gap-5', data: {turbo: false} do |f| %>
         <% if should_render_currency_dropdown? %>
           <div class="flex flex-col gap-2">
-            <%= f.label :switch_to_currency, Spree.t(:currency), class: 'text-xs text-neutral-600' %>
-            <%= f.select :switch_to_currency, options_for_select(supported_currency_options, current_currency) %>
+            <%= f.label :switch_to_currency, Spree.t(:currency, default: "Currency"), class: 'text-sm font-medium text-gray-700' %>
+            <%= f.select :switch_to_currency, 
+                         options_for_select(supported_currency_options, current_currency.to_s),
+                         {},
+                         { class: 'w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white' } %>
           </div>
         <% end %>
         <% if should_render_locale_dropdown? %>
           <div class="flex flex-col gap-2">
-            <%= f.label :switch_to_locale, Spree.t("i18n.language"), class: 'text-xs text-neutral-600' %>
-            <%= f.select :switch_to_locale, options_for_select(supported_locales_options, current_locale) %>
+            <%= f.label :switch_to_locale, Spree.t("i18n.language", default: "Language"), class: 'text-sm font-medium text-gray-700' %>
+            <%= f.select :switch_to_locale, 
+                         options_for_select(supported_locales_options, current_locale.to_s),
+                         {},
+                         { class: 'w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white' } %>
           </div>
         <% end %>
-        <%= f.submit Spree.t("actions.save"), class: 'btn-primary' %>
+        <%= f.submit Spree.t("actions.save", default: "CONFIRM"), class: 'spree-button-primary w-full mt-2 uppercase font-semibold' %>
       <% end %>
     </div>
   </div>
 <% end %>
+
+<%# Footer modal %>
+<%= turbo_frame_tag :settings_modal_footer do %>
+  <div
+    data-modal-target="container"
+    data-action="click->modal#closeBackground keyup@window->modal#closeWithKeyboard"
+    class="currency-and-locale-modal hidden fixed inset-0 overflow-y-auto flex items-center justify-center z-[9999] w-full bg-black bg-opacity-50"
+    style="animation-duration: 150ms;">
+    <div class="w-full max-w-md relative bg-white rounded-lg shadow-xl p-6 mx-4">
+      <button
+      type="button"
+      data-action="modal#close"
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+        <%= render 'spree/shared/icons/close' %>
+      </button>
+      <h3 class="text-lg font-semibold text-gray-900 mb-6"><%= Spree.t("i18n.localization_settings", default: "Select location and language") %></h3>
+      <%= form_with url: spree.settings_path, method: :put, class: 'flex flex-col gap-5', data: {turbo: false} do |f| %>
+        <% if should_render_currency_dropdown? %>
+          <div class="flex flex-col gap-2">
+            <%= f.label :switch_to_currency, Spree.t(:currency, default: "Currency"), class: 'text-sm font-medium text-gray-700' %>
+            <%= f.select :switch_to_currency, 
+                         options_for_select(supported_currency_options, current_currency.to_s),
+                         {},
+                         { class: 'w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white' } %>
+          </div>
+        <% end %>
+        <% if should_render_locale_dropdown? %>
+          <div class="flex flex-col gap-2">
+            <%= f.label :switch_to_locale, Spree.t("i18n.language", default: "Language"), class: 'text-sm font-medium text-gray-700' %>
+            <%= f.select :switch_to_locale, 
+                         options_for_select(supported_locales_options, current_locale.to_s),
+                         {},
+                         { class: 'w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white' } %>
+          </div>
+        <% end %>
+        <%= f.submit Spree.t("actions.save", default: "CONFIRM"), class: 'spree-button-primary w-full mt-2 uppercase font-semibold' %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+

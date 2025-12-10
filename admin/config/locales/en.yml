@@ -222,6 +222,25 @@ en:
           option_types_link: To add more option types please go to <a href="%{link}">Option Types</a>
       recommended_size: Recommended size
       report_created: Your report is being generated. You will receive an email with a download link when it is ready!
+      reviews:
+        title: Reviews
+        edit_review: Edit Review
+        product: Product
+        user: User
+        rating: Rating
+        title_label: Title
+        review_label: Review
+        status: Status
+        approved: Approved
+        pending: Pending
+        all: All
+        approve: Approve
+        unapprove: Unapprove
+        approved: Review approved
+        unapproved: Review unapproved
+        confirm_approve: Are you sure you want to approve this review?
+        confirm_unapprove: Are you sure you want to unapprove this review?
+        unapprove_confirm: Are you sure you want to unapprove this review?
       reset_digital_link_download_limits: Reset download limits
       response_code: Response Code
       selected: selected
@@ -298,8 +317,16 @@ en:
           empty: Add options like size or color
           not_empty: Add another option
         compare_at_price_description: This price is used to show marked down price on the product page.
+        discount_percent_description: Enter discount percentage to automatically calculate sale price from compare at price.
         stock_locations_link: To add more stock locations please go to <a href="%{link}">Stock Locations</a>
         total_inventory_html: 'Total inventory at %{stock_location} location: %{count} available'
+      products:
+        variants:
+          bulk_update_prices: Update All Variants Prices
+          bulk_update_prices_title: Update All Variants Prices
+          bulk_price_placeholder: Enter price
+          bulk_compare_at_placeholder: Enter compare at price
+          apply_to_all_variants: Apply to All Variants
       vendors:
         enterprise_feature: Multi-Vendor Marketplace is available in the Enterprise Edition
       webhooks_subscribers:

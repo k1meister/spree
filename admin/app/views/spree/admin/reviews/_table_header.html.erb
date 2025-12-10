@@ -1,0 +1,10 @@
+<tr>
+  <th scope="col"><%= sort_link @search, :title, Spree.t('admin.reviews.title_label', default: 'Başlık') %></th>
+  <th scope="col"><%= Spree.t('admin.reviews.product', default: 'Ürün') %></th>
+  <th scope="col"><%= Spree.t('admin.reviews.user', default: 'Kullanıcı') %></th>
+  <th scope="col"><%= sort_link @search, :rating, Spree.t('admin.reviews.rating', default: 'Puan') %></th>
+  <th scope="col"><%= sort_link @search, :approved, Spree.t('admin.reviews.status', default: 'Durum') %></th>
+  <th scope="col"><%= sort_link @search, :created_at, Spree.t(:created_at) %></th>
+  <th scope="col"></th>
+</tr>
+

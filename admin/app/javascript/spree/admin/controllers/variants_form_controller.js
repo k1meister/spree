@@ -21,7 +21,11 @@ export default class extends CheckboxSelectAll {
     'deleteButton',
     'checkboxAll',
     'checkbox',
-    'stockItemsCount'
+    'stockItemsCount',
+    'bulkPriceUpdate',
+    'bulkPriceButton',
+    'bulkPriceAmount',
+    'bulkCompareAtAmount'
   ]
 
   static values = {
@@ -702,6 +706,8 @@ export default class extends CheckboxSelectAll {
         `input[data-slot="[prices_attributes][${currency}][currency]_input"]`
       )
       const idInput = variantTarget.querySelector(`input[data-slot="[prices_attributes][${currency}][id]_input"]`)
+      const compareAtAmountInput = variantTarget.querySelector(`input[data-slot="[prices_attributes][${currency}][compare_at_amount]_input"]`)
+      
       priceInput.name = `product[variants_attributes][${idx}][prices_attributes][${currency}]`
       if (currency === this.currentCurrencyValue) {
         priceInput.parentElement.classList.remove('d-none')
@@ -716,6 +722,12 @@ export default class extends CheckboxSelectAll {
       currencyInput.value = currency
       if (existingPrice.id) {
         idInput.value = existingPrice.id
+      }
+      
+      // Set compare_at_amount if input exists
+      if (compareAtAmountInput) {
+        compareAtAmountInput.name = `product[variants_attributes][${idx}][prices_attributes][${currencyIndex}][compare_at_amount]`
+        compareAtAmountInput.value = existingPrice.compare_at_amount || ''
       }
 
       priceInput.name = `product[variants_attributes][${idx}][prices_attributes][${currencyIndex}][amount]`
@@ -1085,7 +1097,8 @@ export default class extends CheckboxSelectAll {
     if (existingPrice) {
       return {
         ...existingPrice,
-        amount: existingPrice.amount ? parseFloat(existingPrice.amount) : existingPrice.amount
+        amount: existingPrice.amount ? parseFloat(existingPrice.amount) : existingPrice.amount,
+        compare_at_amount: existingPrice.compare_at_amount ? parseFloat(existingPrice.compare_at_amount) : (existingPrice.compare_at_amount || null)
       }
     } else {
       const parentName = variantName.split('/')[0]
@@ -1096,6 +1109,7 @@ export default class extends CheckboxSelectAll {
 
       return {
         amount: parentPrices[0] ?? null,
+        compare_at_amount: null,
         id: null
       }
     }
@@ -1123,5 +1137,71 @@ export default class extends CheckboxSelectAll {
     } else {
       this.inventoryFormTarget.classList.add('d-none')
     }
+  }
+
+  showBulkPriceUpdate() {
+    this.bulkPriceUpdateTarget.classList.remove('d-none')
+    this.bulkPriceButtonTarget.classList.add('d-none')
+  }
+
+  hideBulkPriceUpdate() {
+    this.bulkPriceUpdateTarget.classList.add('d-none')
+    this.bulkPriceButtonTarget.classList.remove('d-none')
+    this.bulkPriceAmountTarget.value = ''
+    this.bulkCompareAtAmountTarget.value = ''
+  }
+
+  applyBulkPriceUpdate() {
+    const amount = parseFloat(this.bulkPriceAmountTarget.value) || null
+    const compareAtAmount = parseFloat(this.bulkCompareAtAmountTarget.value) || null
+    const currency = this.currentCurrencyValue
+
+    if (amount === null && compareAtAmount === null) {
+      return
+    }
+
+    // Get all variant rows (excluding parent variants if nested)
+    const variantRows = this.variantsContainerTarget.querySelectorAll('[data-variant-name]:not(.nested)')
+    
+    variantRows.forEach((row) => {
+      const variantName = row.dataset.variantName
+      
+      // Skip if this is a parent variant with children
+      const hasChildren = this.variantsContainerTarget.querySelector(`[data-variant-name^="${variantName}/"]`)
+      if (hasChildren) return
+
+      // Update price amount
+      if (amount !== null) {
+        const priceInput = row.querySelector(`input[data-slot="[prices_attributes][${currency}][amount]_input"]`)
+        if (priceInput) {
+          priceInput.value = amount
+          this.updatePriceForVariant(variantName, amount, currency)
+          priceInput.dispatchEvent(new Event('input', { bubbles: true }))
+        }
+      }
+
+      // Update compare_at_amount
+      if (compareAtAmount !== null) {
+        const existingPrice = this.priceForVariant(variantName, currency)
+        this.pricesValue = {
+          ...this.pricesValue,
+          [variantName]: {
+            ...this.pricesValue[variantName],
+            [currency.toLowerCase()]: {
+              ...existingPrice,
+              compare_at_amount: compareAtAmount
+            }
+          }
+        }
+        
+        // Update the hidden input field if it exists
+        const compareAtAmountInput = row.querySelector(`input[data-slot="[prices_attributes][${currency}][compare_at_amount]_input"]`)
+        if (compareAtAmountInput) {
+          compareAtAmountInput.value = compareAtAmount
+        }
+      }
+    })
+
+    this.hideBulkPriceUpdate()
   }
 }

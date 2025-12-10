@@ -1,0 +1,30 @@
+<%= search_form_for [:admin, @search], url: params[:product_id].present? ? spree.admin_product_reviews_path(@product) : spree.admin_reviews_path, class: "filter-wrap", data: { controller: "filters" } do |f| %>
+  <div class="d-flex flex-column flex-lg-row gap-2">
+    <%= render 'spree/admin/shared/filters_search_bar', param: :title_cont, label: Spree.t('admin.reviews.title_label', default: 'Başlık') %>
+    
+    <% if params[:product_id].blank? %>
+      <%= render 'spree/admin/shared/filters_search_bar', param: :product_name_cont, label: Spree.t('admin.reviews.product', default: 'Ürün') %>
+    <% end %>
+    
+    <div class="form-control d-flex align-items-center py-0 focus-shadow focus-border flex-grow-1 mb-3 mb-lg-0">
+      <%= icon "filter", class: "mr-3 text-muted" %>
+      <%= f.select :approved_eq, 
+          options_for_select([
+            [Spree.t('admin.reviews.all', default: 'Tümü'), ''],
+            [Spree.t('admin.reviews.approved', default: 'Onaylandı'), 'true'],
+            [Spree.t('admin.reviews.pending', default: 'Beklemede'), 'false']
+          ], params.dig(:q, :approved_eq)),
+          {},
+          { 
+            class: "form-control-plaintext px-0",
+            data: { filters_target: :input }
+          } %>
+    </div>
+  </div>
+
+  <%= render "spree/admin/shared/filter_badge_template" %>
+  <div data-filters-target="badgesContainer" class="filter-badges-container"></div>
+<% end %>
+
+
+

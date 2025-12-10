@@ -134,6 +134,46 @@
                 <%= select_tag 'stock_location', variant_form_stock_location_options, class: 'variants-table__actions__select custom-select', data: { action: 'variants-form#updateStockLocationId' } %>
               </div>
             <% end %>
+            <div class="d-flex flex-row align-items-center gap-2">
+              <button type="button" class="btn btn-sm btn-light" data-action="variants-form#showBulkPriceUpdate" data-variants-form-target="bulkPriceButton">
+                <i class="ti ti-edit"></i> <%= Spree.t('admin.products.variants.bulk_update_prices', default: 'Tüm Varyantların Fiyatını Güncelle') %>
+              </button>
+            </div>
+          </div>
+          <div class="variants-table__bulk-price-update d-none border-top p-3 bg-light" data-variants-form-target="bulkPriceUpdate">
+            <h6 class="mb-3"><%= Spree.t('admin.products.variants.bulk_update_prices_title', default: 'Tüm Varyantların Fiyatını Güncelle') %></h6>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label><%= Spree.t(:amount, default: 'Fiyat') %></label>
+                  <div class="input-group">
+                    <%= text_field_tag 'bulk_price_amount', '', class: 'form-control', placeholder: Spree.t('admin.products.variants.bulk_price_placeholder', default: 'Fiyat girin'), data: { variants_form_target: 'bulkPriceAmount' } %>
+                    <div class="input-group-append">
+                      <span class="input-group-text"><%= currency_symbol(current_currency) %></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label><%= Spree.t(:compare_at_amount, default: 'Normal Fiyat') %></label>
+                  <div class="input-group">
+                    <%= text_field_tag 'bulk_compare_at_amount', '', class: 'form-control', placeholder: Spree.t('admin.products.variants.bulk_compare_at_placeholder', default: 'Normal fiyat girin'), data: { variants_form_target: 'bulkCompareAtAmount' } %>
+                    <div class="input-group-append">
+                      <span class="input-group-text"><%= currency_symbol(current_currency) %></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end gap-2 mt-3">
+              <button type="button" class="btn btn-sm btn-light" data-action="variants-form#hideBulkPriceUpdate">
+                <%= Spree.t('actions.cancel', default: 'İptal') %>
+              </button>
+              <button type="button" class="btn btn-sm btn-primary" data-action="variants-form#applyBulkPriceUpdate">
+                <%= Spree.t('admin.products.variants.apply_to_all_variants', default: 'Tüm Varyantlara Uygula') %>
+              </button>
+            </div>
           </div>
           <div class="variants-table__header border-top border-bottom">
             <% if can?(:destroy, @product.default_variant)  %>

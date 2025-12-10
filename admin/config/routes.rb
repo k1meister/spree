@@ -25,6 +25,18 @@ Spree::Core::Engine.add_routes do
       end
       resources :variants, only: [:edit, :update, :destroy]
       resources :digital_assets, except: [:show]
+      resources :reviews, except: [:new, :create] do
+        member do
+          put :approve
+          put :unapprove
+        end
+      end
+    end
+    resources :reviews, only: [:index, :show, :edit, :update, :destroy] do
+      member do
+        put :approve
+        put :unapprove
+      end
     end
     # variant search
     post 'variants/search'

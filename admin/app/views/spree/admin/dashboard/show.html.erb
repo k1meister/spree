@@ -4,7 +4,7 @@
       <%= Spree.t('admin.dashboard.hi') %> <%= try_spree_current_user.first_name %>!
     </h2>
     <p>
-      <%= Spree.t('admin.dashboard.whats_happening_on', store_name: current_store.name).html_safe %>
+      <%= Spree.t('admin.dashboard.whats_happening_on', store_name: current_store.name.presence || Spree.t(:store, default: 'Store')).html_safe %>
     </p>
   </div>
 </div>

@@ -110,8 +110,10 @@ module Spree
           Spree::Gateway::Bogus,
           Spree::Gateway::BogusSimple,
           Spree::Gateway::CustomPaymentSourceMethod,
-          Spree::PaymentMethod::Check,
-          Spree::PaymentMethod::StoreCredit
+          Spree::PaymentMethod::StoreCredit,
+          Spree::PaymentMethod::Cash,
+          Spree::PaymentMethod::StorePos,
+          Spree::PaymentMethod::BankTransfer
         ]
 
         Rails.application.config.spree.adjusters = [

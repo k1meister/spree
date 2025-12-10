@@ -14,7 +14,7 @@ variant_not_available = selected_variant.nil? ||
 
 <div class='<%= sticky_button_classes %> bottom-0 flex flex-col gap-4 z-10' data-sticky-button-target='stickyButton'>
   <%= button_tag type: (variant_not_available || not_all_options_selected ? 'button' : 'submit'),
-                  class: 'btn-primary btn-icon w-full h-12 add-to-cart-button',
+                  class: 'spree-button-primary w-full h-14 text-base font-semibold',
                   data: {
                     action: [
                       'click->product-form#showNotSelectedOptions',
@@ -24,7 +24,17 @@ variant_not_available = selected_variant.nil? ||
                   },
                   disabled: product.price_in(current_currency).zero? do %>
     <% if not_selected_options.size == 1 %>
-      <span><%= Spree.t('storefront.variant_picker.please_choose', option_type: not_selected_options[0].presentation) %></span>
+      <% option_type = not_selected_options[0] %>
+      <%# Use name instead of presentation for more reliable translation %>
+      <% option_type_name = if option_type.name.downcase == 'size'
+                              'Beden'
+                            elsif ['color', 'colour'].include?(option_type.name.downcase)
+                              'Renk'
+                            else
+                              option_type.presentation.to_s
+                            end %>
+      <%# Always use Turkish translation - direct string interpolation %>
+      <span>Lütfen <%= option_type_name %> seçin</span>
     <% elsif not_all_options_selected %>
       <span><%= Spree.t('storefront.variant_picker.please_choose_all_options') %></span>
     <% elsif variant_not_available %>
@@ -39,7 +49,7 @@ variant_not_available = selected_variant.nil? ||
 <% unless without_fixed_button %>
   <div class='p-4 fixed-pdp-button bg-background fixed bottom-0 border-t border-default hidden w-full z-40 left-0' data-sticky-button-target='fixedButton'>
     <%= button_tag type: (variant_not_available || not_all_options_selected ? 'button' : 'submit'),
-                  class: 'btn-primary btn-icon w-full h-12 add-to-cart-button',
+                  class: 'spree-button-primary w-full h-14 text-base font-semibold',
                   data: {
                     action: [
                       'click->product-form#showNotSelectedOptions',
@@ -49,7 +59,17 @@ variant_not_available = selected_variant.nil? ||
                   },
                   disabled: product.price_in(current_currency).zero? do %>
       <% if not_selected_options.size == 1 %>
-        <span><%= Spree.t('storefront.variant_picker.please_choose', option_type: not_selected_options[0].presentation) %></span>
+        <% option_type = not_selected_options[0] %>
+        <%# Use name instead of presentation for more reliable translation %>
+        <% option_type_name = if option_type.name.downcase == 'size'
+                                'Beden'
+                              elsif ['color', 'colour'].include?(option_type.name.downcase)
+                                'Renk'
+                              else
+                                option_type.presentation.to_s
+                              end %>
+        <%# Always use Turkish translation - direct string interpolation %>
+        <span>Lütfen <%= option_type_name %> seçin</span>
       <% elsif not_all_options_selected %>
         <span><%= Spree.t('storefront.variant_picker.please_choose_all_options') %></span>
       <% elsif variant_not_available %>

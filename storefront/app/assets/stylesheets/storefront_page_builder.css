@@ -54,3 +54,497 @@
 .editor-overlay-hover .editor-overlay-toolbar {
   display: block;
 }
+
+/* Product Quantity Selector Custom Styles */
+.quantity-picker-custom {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-default-color, #e5e5e5);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.quantity-btn-custom {
+  background-color: var(--background, #ffffff);
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.quantity-btn-custom:hover {
+  background-color: var(--accent, #f5f5f5);
+}
+
+.quantity-input-custom {
+  border: none;
+  border-left: 1px solid var(--border-default-color, #e5e5e5);
+  border-right: 1px solid var(--border-default-color, #e5e5e5);
+  padding: 8px 12px;
+  text-align: center;
+  width: 60px;
+  -moz-appearance: textfield;
+}
+
+.quantity-input-custom::-webkit-outer-spin-button,
+.quantity-input-custom::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Product Variant Picker Custom Styles */
+.product-variant-picker-custom .dropdown-button {
+  background-color: var(--background, #ffffff);
+  border: 2px solid var(--primary, #000000);
+  color: var(--text, #000000);
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.product-variant-picker-custom .dropdown-button:hover {
+  background-color: var(--primary, #000000);
+  color: var(--background, #ffffff);
+}
+
+.product-variant-picker-custom fieldset[data-option-id] {
+  margin-bottom: 1rem;
+}
+
+/* Enhanced Product Details Styles */
+.product-details-enhanced {
+  padding: 1rem 0;
+}
+
+.variant-size-button {
+  position: relative;
+}
+
+.variant-size-button:disabled {
+  pointer-events: none;
+}
+
+/* Color picker compact styles */
+.product-variant-picker-compact .color-input:checked + label {
+  border: 2px solid #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.15);
+  transform: scale(1.05);
+}
+
+.product-variant-picker-compact .color-input + label {
+  transition: all 0.2s ease;
+}
+
+.product-variant-picker-compact .color-input + label:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Orange theme colors */
+.text-orange-500 {
+  color: #f97316;
+}
+
+.text-orange-600 {
+  color: #ea580c;
+}
+
+.text-orange-700 {
+  color: #c2410c;
+}
+
+.bg-orange-50 {
+  background-color: #fff7ed;
+}
+
+.bg-orange-500 {
+  background-color: #f97316;
+}
+
+.bg-orange-600 {
+  background-color: #ea580c;
+}
+
+.hover\:bg-orange-600:hover {
+  background-color: #ea580c;
+}
+
+.hover\:text-orange-500:hover {
+  color: #f97316;
+}
+
+.hover\:text-orange-600:hover {
+  color: #ea580c;
+}
+
+.border-orange-300 {
+  border-color: #fdba74;
+}
+
+.border-orange-500 {
+  border-color: #f97316;
+}
+
+.hover\:border-orange-300:hover {
+  border-color: #fdba74;
+}
+
+/* Product Images Grid Layout */
+.product-images-grid {
+  width: 100%;
+}
+
+.product-images-grid .grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.product-image-item {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.product-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-image-item:hover img {
+  transform: scale(1.05);
+}
+
+.product-image-item .zoom-icon {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  padding: 0.5rem;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-image-item:hover .zoom-icon {
+  opacity: 0.75;
+}
+
+/* Modern Product Details */
+.product-details-modern {
+  padding: 0;
+}
+
+.product-details-modern h1 {
+  font-size: 1.875rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+@media (min-width: 1024px) {
+  .product-details-modern h1 {
+    font-size: 2.25rem;
+  }
+}
+
+/* Accordion Styles */
+.product-accordion-item-modern {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.product-accordion-item-modern summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.product-accordion-item-modern summary::-webkit-details-marker {
+  display: none;
+}
+
+.product-accordion-item-modern summary::marker {
+  display: none;
+}
+
+.product-accordion-item-modern[open] .product-accordion-icon {
+  transform: rotate(45deg);
+}
+
+.product-accordion-icon {
+  transition: transform 0.2s ease;
+  font-size: 1.25rem;
+  line-height: 1;
+  display: inline-block;
+}
+
+.product-accordion-summary {
+  transition: color 0.2s ease;
+}
+
+.product-accordion-content {
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add to Cart Button E-commerce Style */
+.add-to-cart-button-ecommerce {
+  background-color: #f97316;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.add-to-cart-button-ecommerce:hover:not(:disabled) {
+  background-color: #ea580c;
+}
+
+.add-to-cart-button-ecommerce:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Product Details E-commerce Style */
+.product-details-ecommerce {
+  padding: 0;
+}
+
+.product-details-ecommerce h1 {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+@media (min-width: 1024px) {
+  .product-details-ecommerce h1 {
+    font-size: 1.875rem;
+  }
+}
+
+/* Compact Variant Picker */
+.product-variant-picker-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.variant-picker-fieldset-compact {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.variant-picker-label-compact {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.variant-options-list-compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Tab Styles */
+.product-tab-content {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Spree Button Styles - Standard Buttons */
+/* Use these classes for consistent button styling across the storefront */
+
+/* Primary Button - Black solid (for main actions like "Yorum Yaz") */
+.spree-button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.spree-button-primary:hover {
+  background-color: #1f2937;
+}
+
+/* Secondary Button - Outline style, smaller version of primary */
+.spree-button-secondary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  color: #374151;
+  background-color: #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.spree-button-secondary:hover {
+  border-color: #9ca3af;
+  color: #111827;
+}
+
+.spree-button-secondary:active {
+  border-color: #6b7280;
+  color: #111827;
+}
+
+/* WhatsApp Button - Green solid */
+.spree-button-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #22c55e;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.spree-button-whatsapp:hover {
+  background-color: #16a34a;
+}
+
+/* Reviews Section Advanced */
+.reviews-section-advanced {
+  width: 100%;
+}
+
+.review-card-advanced {
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+}
+
+.review-card-advanced:hover {
+  border-color: #f97316;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.tab-button {
+  transition: all 0.2s ease;
+}
+
+.tab-button.active {
+  color: #111827;
+  border-bottom-color: #111827;
+}
+
+.filter-chip.active {
+  background-color: #1f2937;
+  color: #ffffff;
+}
+
+.filter-chip.active:hover {
+  background-color: #374151;
+}
+
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Variant Picker Modern Styles */
+.product-variant-picker-enhanced fieldset {
+  margin-bottom: 1.5rem;
+}
+
+.product-variant-picker-enhanced label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Compact Size buttons */
+.variant-size-button-compact {
+  min-width: 44px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+}
+
+.variant-size-button-compact:hover:not(:disabled) {
+  border-color: #fb923c;
+  color: #ea580c;
+  transform: translateY(-1px);
+}
+
+.variant-size-button-compact:has(input:checked) {
+  border-color: #f97316;
+  background-color: #f97316;
+  color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.variant-size-button-compact:disabled {
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  text-decoration: line-through;
+  background-color: #f9fafb;
+  position: relative;
+}
+
+/* Color picker thumbnails */
+.product-variant-picker-enhanced .color-input:checked + label {
+  border: 3px solid #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}

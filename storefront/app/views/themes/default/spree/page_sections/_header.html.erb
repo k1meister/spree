@@ -42,16 +42,19 @@
                 <%= render 'spree/shared/icons/close', color: section.preferred_text_color %>
               </div>
             </button>
-            <!-- Search button -->
-            <div class='<%= "lg:relative" unless layout == "logo-centered" %> flex'>
-              <button
-                class='flex items-center ml-4 lg:ml-0'
-                id='open-search'
-                data-action='click->toggle-menu#hide touch->toggle-menu#hide'
-                >
-                <%= render 'spree/shared/icons/search', color: section.preferred_text_color %>
-                <span class='hidden lg:block ml-2 text-sm !leading-6 uppercase'><%= Spree.t(:search) %></span>
-              </button>
+            <!-- Search input -->
+            <div class='<%= "lg:relative" unless layout == "logo-centered" %> flex ml-4 lg:ml-0 w-full max-w-xs'>
+              <%= form_with url: spree.search_path, method: :get, local: true, class: 'relative w-full' do %>
+                <div class='relative flex items-center'>
+                  <button type='submit' class='absolute left-3 text-gray-400 hover:text-gray-600 z-10'>
+                    <%= render 'spree/shared/icons/search', color: section.preferred_text_color %>
+                    <span class='sr-only'><%= Spree.t(:search) %></span>
+                  </button>
+                  <%= text_field_tag :q, params[:q], 
+                      class: 'w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white placeholder-gray-400',
+                      placeholder: Spree.t(:search) %>
+                </div>
+              <% end %>
             </div>
           </div>
           <div class='flex items-center flex-col<%= " lg:flex-1" unless layout == "logo-centered" %> header-nav-container'>
@@ -76,28 +79,6 @@
           <div
             class='flex items-center gap-4 flex-1 justify-end<%= " lg:flex-none order-2" unless layout == "logo-centered" %>'
           >
-            <% if should_render_currency_dropdown? || should_render_locale_dropdown? %>
-              <div
-              data-controller="modal"
-              data-modal-disable-backdrop="true"
-              class="hidden lg:flex">
-                <%= button_tag class: 'flex gap-2 items-center', data: {action: 'modal#open'} do %>
-                  <% if should_render_currency_dropdown? %>
-                    <span>
-                      <%= "#{current_currency} (#{currency_money(current_currency).symbol})" %>
-                    </span>
-                  <% end %>
-                  <% if should_render_locale_dropdown? %>
-                    <span class="uppercase <%= should_render_currency_dropdown?.presence && "border-l pl-2" %> flex items-center gap-1">
-                      <% country_code = current_locale.to_s.split("-").last %>
-                      <%= svg_country_icon(country_code) %>
-                      <span ><%= country_code %></span>
-                    </span>
-                  <% end %>
-                <% end %>
-                <%= turbo_frame_tag :settings_modal, src: spree.settings_path, loading: :lazy  %>
-              </div>
-            <% end %>
             <!-- Desktop Account -->
             <div class='hidden lg:flex'>
               <% if show_account_pane? %>
@@ -155,6 +136,5 @@
     <% if show_account_pane? %>
       <%= render 'spree/shared/account_pane', section: section %>
     <% end %>
-    <%= render 'spree/shared/search', section: section, logo: section.logo, logo_height: section.preferred_desktop_logo_height %>
   </header>
 <% end %>

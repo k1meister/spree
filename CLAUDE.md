@@ -246,6 +246,60 @@ end
 - Implement proper SEO meta tags
 - Ensure accessibility compliance
 
+### Button Styles
+
+Use standardized button classes for consistent styling across the storefront. These classes are defined in `storefront/app/views/spree/shared/_head.html.erb` (inline CSS, always loaded):
+
+**Primary Button (Black Solid)**
+- Use for main call-to-action buttons like "Add to Cart", "Yorum Yaz", "Değerlendirmeyi Gönder"
+- Class: `spree-button-primary`
+- Black background (#000000), white text, hover: dark gray (#1f2937)
+- Can be combined with Tailwind classes like `w-full h-14 text-base font-semibold` for full-width buttons
+
+```erb
+<button type="submit" class="spree-button-primary">
+  Add to Cart
+</button>
+
+<!-- Full width example -->
+<button type="submit" class="spree-button-primary w-full h-14 text-base font-semibold">
+  Add to Cart
+</button>
+```
+
+**Secondary Button (Outline Style)**
+- Use for secondary actions, selection buttons, and smaller buttons
+- Class: `spree-button-secondary`
+- White background, gray border, smaller padding
+- Example: "Please choose Size" type buttons, filter chips
+
+```erb
+<button type="button" class="spree-button-secondary">
+  Button Text
+</button>
+```
+
+**WhatsApp Button (Green)**
+- Use specifically for WhatsApp links/actions
+- Class: `spree-button-whatsapp`
+- Green background (#22c55e), white text, maintains WhatsApp branding
+
+```erb
+<a href="https://wa.me/..." class="spree-button-whatsapp">
+  <svg>...</svg>
+  WhatsApp ile Sor
+</a>
+```
+
+**When to use which:**
+- `spree-button-primary`: Main call-to-action buttons (Add to Cart, Submit forms, Write Review, etc.) - **Currently using black theme**
+- `spree-button-secondary`: Secondary actions, selection buttons, smaller CTAs
+- `spree-button-whatsapp`: Only for WhatsApp-related actions
+
+**Note:** Orange buttons are not currently used in the design. All primary actions use black buttons.
+
+Always prefer these standardized classes over inline Tailwind classes for buttons to maintain consistency.
+
 ### Admin Interface
 
 - Use Spree's admin styling conventions

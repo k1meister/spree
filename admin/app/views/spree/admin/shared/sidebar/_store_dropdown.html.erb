@@ -3,7 +3,7 @@
     <%= dropdown_toggle class: 'store-dropdown-button dropdown-toggle' do %>
       <%= store_admin_icon(current_store, height: 32, width: 32) %>
       <span class="store-name d-none d-lg-block">
-        <%= truncate(current_store.name, length: 10) %>
+        <%= truncate(current_store.name.presence || Spree.t(:store, default: 'Store'), length: 10) %>
       </span>
     <% end %>
     <%= dropdown_menu class: 'ml-2' do %>
@@ -27,7 +27,7 @@
               <div class="store-chooser-item active">
                 <%= store_admin_icon(store, height: 32, width: 32) %>
                 <span class="d-flex flex-column mr-2">
-                  <%= store.name %>
+                  <%= store.name.presence || Spree.t(:store, default: 'Store') %>
                   <small class="text-muted">
                     <%= store.url_or_custom_domain %>
                   </small>
@@ -38,7 +38,7 @@
               <%= link_to spree.admin_dashboard_url(host: store.url), class: 'store-chooser-item' do %>
                 <%= store_admin_icon(store, height: 32, width: 32) %>
                 <span class="d-flex flex-column">
-                  <%= store.name %>
+                  <%= store.name.presence || Spree.t(:store, default: 'Store') %>
                   <small class="text-muted">
                     <%= store.url_or_custom_domain %>
                   </small>

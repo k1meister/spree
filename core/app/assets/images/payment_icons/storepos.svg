@@ -1,0 +1,11 @@
+<svg viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" aria-labelledby="pi-storepos">
+  <title id="pi-storepos">Store POS</title>
+  <rect width="38" height="24" rx="2" fill="#1a1a1a"/>
+  <rect x="2" y="2" width="34" height="20" rx="1" fill="#fff"/>
+  <rect x="4" y="6" width="30" height="2" rx="1" fill="#1a1a1a"/>
+  <rect x="4" y="10" width="20" height="2" rx="1" fill="#1a1a1a"/>
+  <rect x="4" y="14" width="25" height="2" rx="1" fill="#1a1a1a"/>
+  <circle cx="30" cy="12" r="4" fill="#1a1a1a"/>
+  <path d="M28 12 L30 14 L32 10" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+

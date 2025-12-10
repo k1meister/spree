@@ -101,27 +101,6 @@
           </button>
         <% end %>
 
-        <% if should_render_currency_dropdown? || should_render_locale_dropdown? %>
-          <div class="flex mt-4 justify-end">
-            <div data-controller="modal" data-modal-disable-backdrop="true">
-              <%= button_tag class: 'flex gap-2 items-center', data: {action: 'modal#open'} do %>
-                <% if should_render_currency_dropdown? %>
-                  <span>
-                    <%= "#{current_currency} (#{currency_money(current_currency).symbol})" %>
-                  </span>
-                <% end %>
-                <% if should_render_locale_dropdown? %>
-                  <span class="uppercase <%= should_render_currency_dropdown?.presence && "border-l pl-2" %> flex items-center gap-1">
-                    <% country_code = current_locale.to_s.split("-").last %>
-                    <%= svg_country_icon(country_code) %>
-                    <span ><%= country_code %></span>
-                  </span>
-                <% end %>
-              <% end %>
-              <%= turbo_frame_tag :settings_modal, src: spree.settings_path, loading: :lazy %>
-            </div>
-          </div>
-        <% end %>
       </div>
     </div>
     <% if section.blocks.any? %>
