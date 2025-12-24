@@ -1,0 +1,47 @@
+<% if products.any? || taxons.any? %>
+  <div class="space-y-4">
+    <% if products.any? %>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase mb-2 px-2">Ürünler</h3>
+        <ul class="space-y-1">
+          <% products.limit(5).each do |product| %>
+            <li>
+              <%= link_to spree.product_path(product), class: "block px-3 py-2 hover:bg-gray-50 rounded text-sm text-gray-900 transition-colors" do %>
+                <%= product.name %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    
+    <% if taxons.any? %>
+      <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase mb-2 px-2">Kategoriler</h3>
+        <ul class="space-y-1">
+          <% taxons.limit(3).each do |taxon| %>
+            <li>
+              <%= link_to spree_storefront_resource_url(taxon), class: "block px-3 py-2 hover:bg-gray-50 rounded text-sm text-gray-900 transition-colors" do %>
+                <%= taxon.name %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    
+    <% if products.any? || taxons.any? %>
+      <div class="pt-2 border-t border-gray-200">
+        <%= link_to spree.search_path(q: query), class: "block px-3 py-2 text-center text-sm font-semibold text-orange-600 hover:text-orange-700 hover:bg-orange-50 rounded transition-colors" do %>
+          Tüm sonuçları gör →
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="text-center py-4 text-gray-500 text-sm">
+    Sonuç bulunamadı
+  </div>
+<% end %>
+
+

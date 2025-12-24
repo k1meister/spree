@@ -24,6 +24,14 @@ module Spree
     acts_as_taggable_on :tags, :labels
     auto_strip_attributes :name
 
+    # Searchkick integration
+    if defined?(Searchkick)
+      searchkick word_start: [:name, :description, :meta_title], 
+                 suggest: [:name],
+                 settings: { number_of_shards: 1 },
+                 callbacks: :async
+    end
+
     include Spree::ProductScopes
     include Spree::MultiStoreResource
     include Spree::TranslatableResource
@@ -705,6 +713,31 @@ module Spree
       # This method can be used to cache rating calculations if needed
       # For now, we'll calculate on the fly
       # Called from Review model after create/update
+    end
+
+    # Searchkick search_data method
+    if defined?(Searchkick)
+      def search_data
+        {
+          name: name,
+          description: description,
+          meta_title: meta_title,
+          meta_description: meta_description,
+          slug: slug,
+          available_on: available_on,
+          status: status,
+          taxon_ids: taxon_ids,
+          option_value_ids: option_value_ids,
+          store_ids: store_ids,
+          # Price for default currency
+          price: default_variant&.price_in(Spree::Store.default.default_currency)&.amount&.to_f,
+          currency: Spree::Store.default.default_currency.to_s,
+          # Additional fields for better search
+          brand: brand&.name,
+          category: category&.name,
+          sku: default_variant&.sku
+        }
+      end
     end
 
     private

@@ -197,12 +197,14 @@ module Spree
         params = [preview_id, variant_id].compact_blank.join('&')
         params = "?#{params}" if params.present?
 
-        "#{base_url + localize}/products/#{resource.slug}#{params}"
+        # Türkçe slug: /urun
+        "#{base_url + localize}/urun/#{resource.slug}#{params}"
       elsif resource.is_a?(Post)
         preview_id = options[:preview_id].present? ? "?preview_id=#{options[:preview_id]}" : ''
         "#{base_url + localize}/posts/#{resource.slug}#{preview_id}"
       elsif resource.is_a?(Spree::Taxon)
-        "#{base_url + localize}/t/#{resource.permalink}"
+        # /t/ prefix kaldırıldı, direkt taxon slug kullanılıyor
+        "#{base_url + localize}/#{resource.permalink}"
       elsif resource.is_a?(Spree::Page) || resource.is_a?(Spree::Policy)
         "#{base_url + localize}#{resource.page_builder_url}"
       elsif resource.is_a?(Spree::PageLink)

@@ -1,8 +1,19 @@
-<%= turbo_stream.update 'search-suggestions-content' do %>
-  <%= render 'spree/search/suggestions',
-    loaded: true,
-    products: @products,
-    taxons: @taxons,
-    query: query
-  %>
+<%# Check if this is header search dropdown or modal search %>
+<% if params[:header] == 'true' %>
+  <%= turbo_stream.update 'search-suggestions-content' do %>
+    <%= render 'spree/search/header_suggestions',
+      products: @products,
+      taxons: @taxons,
+      query: query
+    %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.update 'search-suggestions-content' do %>
+    <%= render 'spree/search/suggestions',
+      loaded: true,
+      products: @products,
+      taxons: @taxons,
+      query: query
+    %>
+  <% end %>
 <% end %>

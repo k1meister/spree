@@ -16,14 +16,42 @@
       style="<%= section_styles(section) %>"
       class="relative transition-transform duration-300">
       <div class='page-container'>
-        <div class='flex items-center<%= " lg:items-end" if layout == "logo-centered" %> <%= " lg:items-center" unless layout == "logo-centered" %> justify-between '>
-          <% unless layout == 'logo-centered' %>
-            <div class='hidden lg:flex' id='header-logo'>
-              <%= render 'spree/shared/logo', logo: section.logo, height: section.preferred_desktop_logo_height %>
+        <!-- Üst satır: Logo, Arama, İkonlar -->
+        <div class='flex items-center justify-between py-4'>
+          <!-- Logo -->
+          <div class='flex-shrink-0' id='header-logo'>
+            <%= render 'spree/shared/logo', logo: section.logo, height: section.preferred_desktop_logo_height %>
+          </div>
+          
+          <!-- Arama (Ortada) -->
+          <div class='hidden lg:flex flex-1 justify-center px-8'>
+            <div class='w-full max-w-2xl relative' 
+                 data-controller="search-suggestions" 
+                 data-search-suggestions-url-value="<%= spree.search_suggestions_path %>">
+              <%= form_with url: spree.search_path, method: :get, local: true, class: 'relative w-full' do %>
+                <div class='relative flex items-center'>
+                  <button type='submit' class='absolute right-3 text-gray-400 hover:text-gray-600 z-10'>
+                    <%= render 'spree/shared/icons/search', color: section.preferred_text_color %>
+                    <span class='sr-only'><%= Spree.t(:search) %></span>
+                  </button>
+                  <%= text_field_tag :q, params[:q], 
+                      class: 'w-full pl-4 pr-12 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-400',
+                      placeholder: Spree.t(:search),
+                      data: { search_suggestions_target: 'input' } %>
+                </div>
+              <% end %>
+              
+              <!-- Öneriler Dropdown -->
+              <div id="search-suggestions-dropdown" 
+                   class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+                <div id="search-suggestions-content" class="p-4"></div>
+              </div>
             </div>
-          <% end %>
-          <div class='flex -order-1 flex-1 <%= " lg:flex-none lg:order-1 z-10 lg:mr-8" unless layout == "logo-centered" %>'>
-            <!-- Mobile menu toggle, controls the 'mobileMenuOpen' state. -->
+          </div>
+          
+          <!-- Sağ taraf: İkonlar -->
+          <div class='flex items-center gap-3 lg:gap-4 flex-shrink-0'>
+            <!-- Mobile menu toggle -->
             <button
               type='button'
               data-action='click->toggle-menu#toggle touch->toggle-menu#toggle'
@@ -31,59 +59,19 @@
               data-toggle-menu-target='button'
               >
               <span class='sr-only'><%= Spree.t(:toggle_menu) %></span>
-              <div
-                class='absolute top-0'
-              >
+              <div class='absolute top-0'>
                 <%= render 'spree/shared/icons/menu', color: section.preferred_text_color %>
               </div>
-              <div
-                class='absolute top-0 opacity-0'
-              >
+              <div class='absolute top-0 opacity-0'>
                 <%= render 'spree/shared/icons/close', color: section.preferred_text_color %>
               </div>
             </button>
-            <!-- Search input -->
-            <div class='<%= "lg:relative" unless layout == "logo-centered" %> flex ml-4 lg:ml-0 w-full max-w-xs'>
-              <%= form_with url: spree.search_path, method: :get, local: true, class: 'relative w-full' do %>
-                <div class='relative flex items-center'>
-                  <button type='submit' class='absolute left-3 text-gray-400 hover:text-gray-600 z-10'>
-                    <%= render 'spree/shared/icons/search', color: section.preferred_text_color %>
-                    <span class='sr-only'><%= Spree.t(:search) %></span>
-                  </button>
-                  <%= text_field_tag :q, params[:q], 
-                      class: 'w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white placeholder-gray-400',
-                      placeholder: Spree.t(:search) %>
-                </div>
-              <% end %>
-            </div>
-          </div>
-          <div class='flex items-center flex-col<%= " lg:flex-1" unless layout == "logo-centered" %> header-nav-container'>
-            <!-- Logo -->
-            <div class='<%= "flex lg:pb-4" if layout == "logo-centered" %><%= "lg:hidden" unless layout == "logo-centered" %>' id='header-logo'>
-              <%= render 'spree/shared/logo', logo: section.logo, height: section.preferred_desktop_logo_height %>
-            </div>
-            <!-- Desktop Menu -->
-            <% if layout == 'nav-centered' %>
-              <div
-                class='hidden lg:flex absolute top-px left-1/2 -translate-x-1/2 justify-center w-[calc(100%-29rem)] overflow-auto'
-              >
-              <% end %>
-              <div class='hidden lg:flex<%= " w-full px-12" if layout == "left" %>'>
-                <div class='flex flex-wrap justify-center mx-4 h-full'>
-                  <%= render 'spree/page_sections/nav/desktop', section: section %>
-                </div>
-              </div>
-            </div>
-            <% if layout == 'nav-centered' %></div>
-          <% end %>
-          <div
-            class='flex items-center gap-4 flex-1 justify-end<%= " lg:flex-none order-2" unless layout == "logo-centered" %>'
-          >
+            
             <!-- Desktop Account -->
             <div class='hidden lg:flex'>
               <% if show_account_pane? %>
                 <button
-                  data-action='click->slideover-account#toggle click@window->slideover-account#hide click->toggle-menu#hide touch->toggle-menu#hide'
+                  data-action='click->slideover-account#toggle click@window->slideover-account#hide'
                   >
                   <%= render 'spree/shared/icons/account', color: section.preferred_text_color, section: section %>
                 </button>
@@ -113,6 +101,13 @@
               >
               <%= render 'spree/shared/cart_icon' %>
             </div>
+          </div>
+        </div>
+        
+        <!-- Alt satır: Navigation Menü -->
+        <div class='hidden lg:flex items-center justify-center border-t border-gray-200 py-3'>
+          <div class='flex items-center gap-4 lg:gap-6'>
+            <%= render 'spree/page_sections/nav/desktop', section: section %>
           </div>
         </div>
       </div>

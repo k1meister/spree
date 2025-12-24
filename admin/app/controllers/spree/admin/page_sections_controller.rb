@@ -14,7 +14,17 @@ module Spree
           section_class = available_page_section_types.find { |type| type.to_s == page_section_type }
 
           if section_class
-            @page_section = section_class.new(permitted_resource_params)
+            # Ensure the class is properly loaded before creating instance
+            section_class_name = section_class.to_s
+            Rails.logger.debug "Creating page section with type: #{section_class_name}"
+            
+            # Force class loading to avoid STI issues
+            loaded_class = section_class_name.constantize
+            
+            # Set @object for permitted_resource_params
+            @object = loaded_class.new
+            
+            @page_section = loaded_class.new(permitted_resource_params)
             @page_section.pageable = @pageable
             @page_section.save!
           end

@@ -156,6 +156,29 @@ tr:
         pinch_to_zoom_html: Yakınlaştırmak için<br>sıkıştırın
         primary_image: birincil resim
         secondary_image: ikincil resim
+        shipping_information: Kargo Bilgileri
+        free_shipping: Ücretsiz Kargo
+        estimated_shipping_date: En geç %{date} günü kargoya verilir.
+        view_all_details: Tüm Detayları Gör
+        shipping_info_unavailable: Kargo bilgisi mevcut değil.
+        ship_today: Bugün kargoya verilir
+        ship_tomorrow: Yarın kargoya verilir
+        ship_on_date: "%{date} günü kargoya verilir"
+        ship_today_with_time: "%{time} sipariş verirseniz Bugün kargoya verilir"
+        ship_tomorrow_with_time: "%{time} sipariş verirseniz Yarın kargoya verilir"
+        within_time: "%{hours} saat %{minutes} dakika içinde"
+        within_hours: "%{hours} saat içinde"
+        fast_shipping: "⚡ Hızlı Kargo Fırsatı"
+        order_within: "Sipariş verirseniz"
+        delivery_information: "Teslimat Bilgisi"
+        shipping_fee: "Kargo Ücreti"
+        shipping_company: "Kargo Şirketi"
+        shipping_date_label: "Kargoya Verileceği Tarih"
+        shipping_province: "Kargoya Verileceği İl"
+        ship_on_date_modal: "En geç %{date} günü kargoya verilir."
+        close: "Kapat"
+        warranty: "Garanti Süresi"
+        months: "Ay"
       refund_action_not_required_message:
         order_canceled:
           fully: Bu sipariş iptal edildi. Başka bir işlem gerekmez. Birkaç iş günü içinde geri ödeme alacaksınız.

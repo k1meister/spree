@@ -4,18 +4,16 @@ Spree::Core::Engine.add_routes do
     get '/password', to: 'password#show', as: :password
     post '/password', to: 'password#check', as: :check_password
 
-    # Product Catalog
-    resources :products, only: [:index, :show], path: '/products' do
+    # Product Catalog - Türkçe slug: /urun
+    resources :products, only: [:index, :show], path: '/urun' do
       member do
         get :related
       end
       resources :reviews, only: [:create]
     end
-    get '/t/*id', to: 'taxons#show', as: :nested_taxons
     get '/tx/:id', to: 'taxonomies#show', as: :taxonomy
 
-    # Pages
-    resources :pages, only: [:show]
+    # Policies
     resources :policies, only: %i[show]
 
     # Page Sections (used for lazy loading, eg. product carousels)
@@ -86,6 +84,59 @@ Spree::Core::Engine.add_routes do
 
     # Digital Links
     resources :digital_links, only: [:show]
+
+    # Pages - /pages/ prefix kaldırıldı, direkt slug kullanılıyor
+    # Wildcard route'tan önce ama diğer route'lardan sonra
+    get '/:id', to: 'pages#show', as: :page, constraints: lambda { |req|
+      path = req.path
+      
+      # ActiveStorage path'lerini hariç tut
+      return false if path.start_with?('/rails/active_storage')
+      return false if path.start_with?('/rails/service_blob')
+      return false if path.start_with?('/rails/disk')
+      
+      # Admin path'lerini kontrol et
+      return false if path.start_with?('/admin')
+      return false if path.include?('/admin/')
+      
+      # Excluded path'leri kontrol et
+      excluded_paths = %w[urun posts cart checkout account search contact password settings order_status newsletter_subscribers contacts digital_links wishlists addresses policies page_sections tx robots.txt sitemap.xml.gz sitemap admin assets images javascripts stylesheets rails]
+      first_segment = path.split('/').reject(&:blank?).first
+      return false if excluded_paths.include?(first_segment)
+      
+      # Sayısal ID değilse ve path varsa
+      # Page slug kontrolü - eğer bu bir page slug'ıysa true döndür
+      if first_segment.present? && !first_segment.match?(/^\d+$/)
+        page = Spree::Page.custom.friendly.find_by(slug: first_segment)
+        return page.present?
+      end
+      
+      false
+    }
+
+    # Taxon routes - /t/ prefix kaldırıldı, direkt slug kullanılıyor
+    # Türkçe slug'lar: koleksiyon, kategori, marka vb.
+    # En sona konuldu ki diğer route'lar öncelikli olsun
+    get '/*id', to: 'taxons#show', as: :nested_taxons, constraints: lambda { |req|
+      path = req.path
+      
+      # ActiveStorage path'lerini hariç tut
+      return false if path.start_with?('/rails/active_storage')
+      return false if path.start_with?('/rails/service_blob')
+      return false if path.start_with?('/rails/disk')
+      
+      # Admin path'lerini kontrol et
+      return false if path.start_with?('/admin')
+      return false if path.include?('/admin/')
+      
+      # Excluded path'leri kontrol et
+      excluded_paths = %w[urun posts cart checkout account search contact password settings order_status newsletter_subscribers contacts digital_links wishlists addresses pages policies page_sections tx robots.txt sitemap.xml.gz sitemap admin assets images javascripts stylesheets rails]
+      first_segment = path.split('/').reject(&:blank?).first
+      return false if excluded_paths.include?(first_segment)
+      
+      # Sadece sayısal ID değilse ve path varsa
+      first_segment.present? && !first_segment.match?(/^\d+$/)
+    }
 
     root to: 'home#index'
   end

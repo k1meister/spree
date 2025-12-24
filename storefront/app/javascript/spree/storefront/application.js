@@ -56,6 +56,7 @@ const controllers = [
   'scroll-to',
   'search-suggestions',
   'searchable-list',
+  'shipping-countdown',
   'slideover-account',
   'slideover',
   'sticky-button',

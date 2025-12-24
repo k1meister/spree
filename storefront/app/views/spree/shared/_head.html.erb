@@ -84,10 +84,10 @@
     font-display: swap;
   }
 
-  /* Global Font Application */
+  /* Global Font Application - Slightly increased (1px) for better readability */
   body {
     font-family: 'Trade Gothic LT Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    font-size: 0.938rem;
+    font-size: 0.969rem; /* ~15.5px, slightly larger than 0.938rem (15px) */
     font-weight: 400;
     line-height: 1.5;
   }
@@ -183,10 +183,10 @@
   }
 
   /* Global Font Styles - Applied Site-wide */
-  /* Base font for body and all text elements */
+  /* Base font for body and all text elements - Slightly increased (1px) for better readability */
   body {
     font-family: 'Trade Gothic LT Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    font-size: 0.938rem;
+    font-size: 0.969rem; /* ~15.5px, slightly larger than 0.938rem (15px) */
     font-weight: 400;
     line-height: 1.5;
     color: #000;
@@ -205,26 +205,29 @@
     font-weight: 700;
   }
 
-  /* Navigation and Header */
-  header,
-  nav,
-  .header-nav-container,
-  .header--nav-link,
-  .header--nav-item,
-  .header--mega-nav-container,
-  .header--mega-nav-featured-taxon-title {
-    font-family: 'BlenderPro', sans-serif;
-  }
+         /* Navigation and Header */
+         header,
+         nav,
+         .header-nav-container,
+         .header--nav-link,
+         .header--nav-item,
+         .header--mega-nav-container,
+         .header--mega-nav-featured-taxon-title {
+           font-family: 'BlenderPro', sans-serif;
+         }
 
-  /* Navigation Links */
-  nav a,
-  .header-nav-container a,
-  .header--nav-link {
-    font-family: 'BlenderPro', sans-serif;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
+         /* Navigation Links */
+         nav a,
+         .header-nav-container a,
+         .header--nav-link,
+         .header--nav-item a,
+         .header--mega-nav-container a {
+           font-family: 'BlenderPro', sans-serif;
+           font-weight: 700 !important; /* Kalın yazı için 700 (Bold) */
+           font-size: 1.125rem !important; /* 18px - Daha büyük yazı */
+           text-transform: uppercase;
+           letter-spacing: 0.05em;
+         }
 
   /* Product Page Typography */
   .product-details-ecommerce h1 {

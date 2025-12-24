@@ -12,7 +12,8 @@ module Spree
       def page_builder_url
         return unless page_builder_url_exists?(:page_path)
 
-        Spree::Core::Engine.routes.url_helpers.page_path(self)
+        # /pages/ prefix kaldırıldı, direkt slug kullanılıyor
+        "/#{slug}"
       end
 
       def default_sections
