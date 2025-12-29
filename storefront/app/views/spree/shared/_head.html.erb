@@ -223,10 +223,11 @@
          .header--nav-item a,
          .header--mega-nav-container a {
            font-family: 'BlenderPro', sans-serif;
-           font-weight: 700 !important; /* Kalın yazı için 700 (Bold) */
-           font-size: 1.125rem !important; /* 18px - Daha büyük yazı */
-           text-transform: uppercase;
-           letter-spacing: 0.05em;
+           font-weight: 500;
+           font-size: 0.938rem; /* ~15px */
+           text-transform: none;
+           letter-spacing: normal;
+           color: #000000; /* Siyah renk */
          }
 
   /* Product Page Typography */
@@ -276,6 +277,24 @@
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+
+  /* Reviews sort label - no uppercase - Must be after all other label rules */
+  .reviews-section-advanced label.reviews-sort-label,
+  .reviews-section-advanced .reviews-sort-label,
+  label.reviews-sort-label,
+  .reviews-sort-label {
+    text-transform: none !important;
+    font-family: inherit !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    letter-spacing: normal !important;
+  }
+  
+  /* Override any product-details-ecommerce label rules for reviews */
+  .reviews-section-advanced label.reviews-sort-label,
+  .reviews-section-advanced .reviews-sort-label {
+    text-transform: none !important;
   }
 
   .variant-picker-label,
