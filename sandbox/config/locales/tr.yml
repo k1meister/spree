@@ -1,0 +1,39 @@
+---
+tr:
+  activerecord:
+    errors:
+      models:
+        spree/review:
+          attributes:
+            user_id:
+              already_reviewed: Bu ürün için zaten bir yorum bıraktınız
+  spree:
+    admin:
+      reviews:
+        title: "Ürün Yorumları"
+        title_label: "Başlık"
+        product: "Ürün"
+        user: "Kullanıcı"
+        rating: "Puan"
+        status: "Durum"
+        approved: "Onaylandı"
+        pending: "Beklemede"
+        approve: "Onayla"
+        unapprove: "Onayı Kaldır"
+        unapprove_confirm: "Onayı kaldırmak istediğinize emin misiniz?"
+        edit: "Yorumu Düzenle"
+        review_label: "Yorum"
+        back: "Geri"
+      payment_methods:
+        store_credit_description: "Müşterilerin bakiye ile ödeme yapmasına izin verin. Admin panelinden müşterilere bakiye verin."
+        cash_description: "Müşterilerin nakit ödeme yapmasına izin verin."
+        store_pos_description: "Mağazadan lokal POS cihazı ile ödeme alın."
+        bank_transfer_description: "Müşterilerin banka havalesi ile ödeme yapmasına izin verin."
+    i18n:
+      this_file_language: Türkçe
+      available_locales: Mevcut Diller
+      country: Ülke
+      default_country: Varsayılan Ülke
+      fields: Alanlar
+      language: Dil
+

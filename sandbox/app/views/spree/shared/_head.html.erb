@@ -1,0 +1,450 @@
+<meta charset="utf-8">
+<title><%= title %></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<%= canonical_tag(current_store.url_or_custom_domain) %>
+<%= csrf_meta_tags %>
+
+<% cache current_store do %>
+  <% if current_store.favicon_image.attached? && current_store.favicon_image.variable? %>
+    <link rel="icon" href="<%= spree_image_url(current_store.favicon_image, width: 256, height: 256) %>">
+  <% end %>
+<% end %>
+
+<%= render 'spree/shared/meta_tags' %>
+<%= render 'spree/shared/css_variables' %>
+<%= render 'spree/shared/fonts' %>
+
+<script async src="https://ga.jspm.io/npm:es-module-shims@1.8.2/dist/es-module-shims.js" data-turbo-track="reload"></script>
+
+<% if Rails.application.importmap.packages["application"].present? %>
+  <%= javascript_importmap_tags "application" %>
+  <%= javascript_import_module_tag "application-spree-storefront" %>
+<% else %>
+  <%= javascript_importmap_tags "application-spree-storefront" %>
+<% end %>
+
+<%= javascript_tag "wishedVariantIds = #{(current_wishlist&.variant_ids&.map(&:to_s) || []).to_json.html_safe};" %>
+
+<%= stylesheet_link_tag "tailwind", defer: true, data: { turbo_track: 'reload' } %>
+<%= stylesheet_link_tag "storefront_page_builder", defer: true, data: { turbo_track: 'reload' } if page_builder_enabled? %>  
+
+<%= yield :head %>
+
+<%= render_storefront_partials(:head_partials) unless page_builder_enabled? %>
+
+<% if Rails.env.test? %>
+  <% # for test environment we need to skip uppercase so we won't get false failures with different text transforms %>
+  <style>
+    .uppercase {
+      text-transform: none !important;
+    }
+  </style>
+<% end %>
+
+<style>
+  /* BlenderPro Fonts */
+  @font-face {
+    font-family: 'BlenderPro';
+    src: url('<%= asset_path('BlenderPro-Medium.woff2') %>') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'BlenderPro';
+    src: url('<%= asset_path('BlenderPro-Bold.woff2') %>') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'BlenderPro';
+    src: url('<%= asset_path('BlenderPro-Heavy.woff2') %>') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  /* Trade Gothic LT Pro Font */
+  @font-face {
+    font-family: 'Trade Gothic LT Pro';
+    src: url('<%= asset_path('TradeGothicLTPro.woff2') %>') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Trade Gothic LT Std';
+    src: url('<%= asset_path('TradeGothicLTStd.woff2') %>') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  /* Global Font Application */
+  body {
+    font-family: 'Trade Gothic LT Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    font-size: 0.938rem;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  /* Headings - BlenderPro */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'BlenderPro', sans-serif;
+  }
+
+  /* Spree Button Styles - Standard Buttons - Always Loaded */
+  
+  /* Primary Button - Black solid (for main actions like "Yorum Yaz", "Add to Cart") */
+  .spree-button-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .spree-button-primary:hover {
+    background-color: #1f2937;
+  }
+
+  /* Full width primary button (for Add to Cart) */
+  .spree-button-primary.w-full {
+    width: 100%;
+  }
+
+  .spree-button-primary.h-14 {
+    height: 3.5rem;
+  }
+
+  .spree-button-primary.text-base {
+    font-size: 1rem;
+  }
+
+  /* Secondary Button - Outline style, smaller version of primary */
+  .spree-button-secondary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    color: #374151;
+    background-color: #ffffff;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .spree-button-secondary:hover {
+    border-color: #9ca3af;
+    color: #111827;
+  }
+
+  .spree-button-secondary:active {
+    border-color: #6b7280;
+    color: #111827;
+  }
+
+  /* WhatsApp Button - Green solid */
+  .spree-button-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #22c55e;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .spree-button-whatsapp:hover {
+    background-color: #16a34a;
+  }
+
+  /* Global Font Styles - Applied Site-wide */
+  /* Base font for body and all text elements */
+  body {
+    font-family: 'Trade Gothic LT Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    font-size: 0.938rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #000;
+    background-color: #fff;
+  }
+
+  /* All text elements inherit from body */
+  body *:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6):not(button):not(.btn):not(nav):not(header):not(.header-nav-container):not(.header--nav-link):not(.header--nav-item):not(.spree-button-primary):not(.spree-button-secondary):not(.spree-button-whatsapp):not(.product-card-title):not(.product-card-brand):not(.tab-button):not([data-controller="tabs"] button):not(.tabs button):not(label):not(.form-label):not(.field-label):not(.variant-picker-label):not(.quantity-label) {
+    font-family: inherit;
+  }
+
+  /* Headings - BlenderPro */
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Navigation and Header */
+  header,
+  nav,
+  .header-nav-container,
+  .header--nav-link,
+  .header--nav-item,
+  .header--mega-nav-container,
+  .header--mega-nav-featured-taxon-title {
+    font-family: 'BlenderPro', sans-serif;
+  }
+
+         /* Navigation Links */
+         nav a,
+         .header-nav-container a,
+         .header--nav-link,
+         .header--nav-item a,
+         .header--mega-nav-container a {
+           font-family: 'BlenderPro', sans-serif;
+           font-weight: 700 !important; /* Kalın yazı için 700 (Bold) */
+           font-size: 1.125rem !important; /* 18px - Daha büyük yazı */
+           text-transform: uppercase;
+           letter-spacing: 0.05em;
+         }
+
+  /* Product Page Typography */
+  .product-details-ecommerce h1 {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+    font-size: 1.875rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .product-details-ecommerce .product-price {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+    font-size: 1.875rem;
+    color: #f97316;
+  }
+
+  .product-details-ecommerce .product-features {
+    font-family: 'Trade Gothic LT Pro', sans-serif;
+    font-size: 0.938rem;
+    line-height: 1.6;
+  }
+
+  .product-details-ecommerce .product-features ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .product-details-ecommerce .product-features li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .product-details-ecommerce .product-features li:before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #000;
+    font-weight: bold;
+  }
+
+  .product-details-ecommerce label {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .variant-picker-label,
+  .quantity-label {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #000;
+  }
+
+  /* Header and Navigation Fonts */
+  header h1,
+  header h2,
+  header h3,
+  .header-nav-container {
+    font-family: 'BlenderPro', sans-serif;
+  }
+
+  /* Product Card Titles */
+  .product-card-title {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 500;
+  }
+
+  /* Buttons */
+  .spree-button-primary,
+  .spree-button-secondary,
+  .spree-button-whatsapp,
+  button,
+  .btn,
+  input[type="submit"],
+  input[type="button"] {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Inputs and Form Elements - inherit from body */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  textarea,
+  select {
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  /* Reviews Section */
+  .reviews-section-advanced {
+    font-family: inherit;
+  }
+
+  .reviews-section-advanced h2,
+  .reviews-section-advanced h3,
+  .reviews-section-advanced h4,
+  .reviews-section-advanced .review-title,
+  .reviews-section-advanced .reviewer-name,
+  .reviews-section-advanced .tab-button {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+  }
+
+  .reviews-section-advanced .review-card-advanced,
+  .reviews-section-advanced .review-text,
+  .reviews-section-advanced .review-date,
+  .reviews-section-advanced p,
+  .reviews-section-advanced span,
+  .reviews-section-advanced .text-sm,
+  .reviews-section-advanced .text-xs,
+  .reviews-section-advanced .text-lg {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  .reviews-section-advanced .filter-chip,
+  .reviews-section-advanced select,
+  .reviews-section-advanced input[type="text"],
+  .reviews-section-advanced input[type="search"] {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 500;
+  }
+
+  .reviews-section-advanced .review-card-advanced h3 {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .reviews-section-advanced .reviewer-name {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Footer */
+  footer {
+    font-family: inherit;
+  }
+
+  footer h3,
+  footer h4,
+  footer h1,
+  footer h2,
+  footer h5,
+  footer h6 {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Product Cards */
+  .product-card-title,
+  .product-card-brand,
+  .product-card-price {
+    font-family: 'BlenderPro', sans-serif;
+  }
+
+  .product-card-title {
+    font-weight: 500;
+  }
+
+  .product-card-brand {
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  /* Tabs */
+  [data-controller="tabs"] button,
+  .tab-button,
+  .tabs button {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Labels and Form Labels */
+  label,
+  .form-label,
+  .field-label {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Links - inherit from body */
+  a {
+    font-family: inherit;
+  }
+
+  /* Price Display */
+  .price,
+  .product-price,
+  .money {
+    font-family: 'BlenderPro', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Search Input */
+  input[type="search"],
+  .search-input {
+    font-family: 'Trade Gothic LT Pro', sans-serif;
+  }
+</style>
+
+<%= render 'spree/shared/google_places_api_loader' %>
