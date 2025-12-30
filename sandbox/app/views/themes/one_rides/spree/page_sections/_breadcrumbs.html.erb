@@ -1,0 +1,24 @@
+<div style="<%= section_styles(section) %>">
+  <div class="page-container">
+    <nav id="breadcrumbs" aria-label="breadcrumbs" class="py-3">
+      <% if @product.present? %>
+        <% taxons = product_breadcrumb_taxons(@product) %>
+
+        <ul class="inline-flex gap-2 items-center text-base font-medium">
+          <% taxons.each_with_index do |taxon, index| %>
+            <li class="breadcrumb-item">
+              <%= link_to taxon.name, spree.nested_taxons_path(taxon), title: taxon.name, class: "text-gray-600 hover:text-gray-900 transition-colors" %>
+            </li>
+            <li class="breadcrumb-separator text-gray-400 <%= 'hidden md:block' if index == taxons.length - 1 %>">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </li>
+          <% end %>
+
+          <li class="text-gray-600"><%= @product.name %></li>
+        </ul>
+      <% end %>
+    </nav>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+<% selected_option =
+  product_selected_option_for_option(
+    option_type,
+    product: product,
+    selected_variant: selected_variant,
+    options_param_name: options_param_name,
+  ) %>
+<% variants_available_arr =
+  product.variants.map do |v|
+    v.purchasable? && v.price_in(current_currency).amount.present?
+  end %>
+<% variants_option1_arr = product.variants.map { |v| v.options.first&.dig(:value) } %>
+<% variants_option2_arr =
+  product.variants.map { |v| v.options.second&.dig(:value) } %>
+<% variants_option3_arr = product.variants.map { |v| v.options.third&.dig(:value) } %>
+<% product_option_values_for_option(option_type, product: product).each_with_index do |value, index| %>
+  <% option_disabled = true %>
+  <% variants_option1_arr.each_with_index do |option1_name, index| %>
+    <% case position %>
+    <% when 0 %>
+      <% if option1_name == value.name && variants_available_arr[index] %>
+        <% option_disabled = false %>
+      <% end %>
+    <% when 1 %>
+      <% if product_selected_option_for_option(product.option_types[0], product: product, options_param_name: options_param_name)&.name == option1_name && variants_option2_arr[index] == value.name && variants_available_arr[index] %>
+        <% option_disabled = false %>
+      <% end %>
+    <% when 2 %>
+      <% if product_selected_option_for_option(product.option_types[0], product: product, options_param_name: options_param_name)&.name == option1_name && variants_option2_arr[index] == product_selected_option_for_option(product.option_types[1], product: product, options_param_name: options_param_name)&.name && variants_option3_arr[index] == value.name && variants_available_arr[index] %>
+        <% option_disabled = false %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% if option_type.color? %>
+    <li>
+      <label class="cursor-pointer">
+        <%= radio_button_tag option_type.presentation, value.name, selected_option == value,
+          name: option_type.presentation,
+          id: "product-option-#{product.id}-#{position}-#{index}",
+          class: "sr-only peer color-input",
+          data: {
+            action: 'change->product-form#updateVariant',
+            product_form_target: 'option',
+            option_id: option_type.id
+          }
+        %>
+        <%= render 'spree/products/color_picker', disabled: option_disabled %>
+      </label>
+    </li>
+  <% else %>
+    <%= radio_button_tag option_type.presentation, value.name, selected_option == value,
+      disabled: option_disabled,
+      class: 'hidden peer',
+      data: {
+        action: 'change->product-form#updateVariant',
+        product_form_target: 'option',
+        option_id: option_type.id
+      },
+      name: option_type.presentation,
+      id: "product-option-#{product.id}-#{position}-#{index}"
+    %>
+    <label
+      for='product-option-<%= product.id %>-<%= position %>-<%= index %>'
+      class='variant-size-button-compact relative inline-flex items-center justify-center min-w-[52px] px-4 py-2.5 text-base font-medium border rounded transition-all duration-200 <%= option_disabled ? "border-gray-200 text-gray-400 cursor-not-allowed line-through bg-gray-50" : selected_option == value ? "border-orange-500 bg-orange-500 text-white shadow-sm" : "border-gray-300 text-gray-700 hover:border-orange-400 hover:text-orange-600 cursor-pointer bg-white" %>'
+    >
+      <%=h value.presentation %>
+      <% if option_disabled %>
+        <svg class="absolute top-0 right-0 w-4 h-4 text-red-500 transform rotate-45" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/>
+        </svg>
+      <% end %>
+    </label>
+  <% end %>
+<% end %>

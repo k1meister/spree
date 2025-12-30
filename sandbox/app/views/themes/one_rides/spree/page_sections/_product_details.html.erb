@@ -1,0 +1,558 @@
+<turbo-frame id="main-product-<%= product.id %>" target="_top">
+  <% current_variant = @selected_variant || @variant_from_options || product.first_or_default_variant(current_currency) %>
+  <div class="main-product-container" style="<%= section_styles(section) %>">
+    <div
+      class="page-container lg:mb-16"
+      <%= 'data-controller=product-form' %>
+      data-product-form-required-options-value='<%= product.option_type_ids.map(&:to_s).to_json %>'
+      data-product-form-selected-variant-disabled-value='<%= !@selected_variant&.in_stock? %>'
+      data-product-form-variant-from-options-disabled-value='<%= !@variant_from_options&.in_stock? %>'
+      data-product-form-frame-name-value="main-product-<%= product.id %>"
+      data-product-form-url-value="<%= spree.product_url(product) %>">
+      <template data-product-form-target="spinnerTemplate">
+        <%= render "spree/shared/icons/spinner" %>
+      </template>
+
+      <div id="product-details-page">
+        <% images = product_media_gallery_images(product, selected_variant: @selected_variant, variant_from_options: @variant_from_options) %>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8 lg:gap-x-12 items-start">
+          <%# Left Column - Product Images %>
+          <div class="lg:col-span-7 relative">
+            <div class="lg:hidden mb-6">
+              <%= render 'spree/products/media_gallery', images: images, product: product %>
+            </div>
+            <div class="hidden lg:block" data-product-form-target="desktopMediaGallery">
+              <%= render 'spree/products/media_gallery', images: images, desktop: true, product: product %>
+            </div>
+          </div>
+
+          <%# Right Column - Product Details %>
+          <div class="lg:col-span-5 lg:col-start-8 flex flex-col h-full">
+            <% show_waitlist_modal = spree.respond_to?(:waitlists_path) && current_variant.present? %>
+            <div
+              <% if show_waitlist_modal %>
+              data-controller="modal"
+              <% end %>
+              data-modal-allow-background-close="true"
+              class="h-full w-full waitlist-modal"
+              data-modal-backdrop-color-value="rgba(0,0,0,0.32)">
+              <%= form_with(url: spree.line_items_path, method: :post, data: { controller: "turbo-stream-form", product_form_target: "form" }) do |f| %>
+                <%= hidden_field_tag :variant_id, current_variant&.id %>
+
+                <div data-product-form-target="productDetails" class="product-details-ecommerce">
+                  <%# Title %>
+                  <% section.blocks.each do |block| %>
+                    <% next unless block.class.name == 'Spree::PageBlocks::Products::Title' %>
+                    <h1 class="text-2xl lg:text-3xl font-semibold mb-3 text-gray-900">
+                      <%= product.name %>
+                    </h1>
+                  <% end %>
+
+                  <%# Rating and Reviews %>
+                  <div class="flex items-center gap-3 mb-4">
+                    <div class="flex items-center gap-1">
+                      <% avg_rating = product.average_rating %>
+                      <span class="text-lg font-semibold text-gray-900"><%= number_with_precision(avg_rating, precision: 1) %></span>
+                      <div class="flex items-center gap-0.5">
+                        <% 5.times do |i| %>
+                          <span class="text-orange-500 text-lg leading-none">
+                            <% if i < avg_rating.floor %>
+                              ★
+                            <% elsif i < avg_rating.ceil && avg_rating % 1 >= 0.5 %>
+                              ★
+                            <% else %>
+                              ☆
+                            <% end %>
+                          </span>
+                        <% end %>
+                      </div>
+                    </div>
+                    <span class="text-sm text-gray-600">
+                      <%= product.reviews_count %> <%= Spree.t('storefront.reviews.reviews', default: 'Değerlendirme') %>
+                    </span>
+                  </div>
+
+                  <%# Price Section %>
+                  <% section.blocks.each do |block| %>
+                    <% next unless block.class.name == 'Spree::PageBlocks::Products::Price' %>
+                    <% price = current_variant&.price_in(current_currency) || product.price_in(current_currency) %>
+                    <div class="mb-6">
+                      <% if price.compare_at_amount.present? && price.compare_at_amount > price.amount %>
+                        <div class="mb-2">
+                          <span class="text-3xl font-black text-green-600" style="font-weight: 900;"><%= price.display_amount %></span>
+                          <span class="text-lg text-gray-500 line-through ml-2"><%= price.display_compare_at_amount %></span>
+                        </div>
+                        <% savings = price.compare_at_amount - price.amount %>
+                        <% savings_money = Spree::Money.new(savings, currency: price.currency) %>
+                        <div class="inline-block px-3 py-1 bg-green-50 border border-green-200 rounded mb-2">
+                          <span class="text-sm font-medium text-green-700">
+                            <%= Spree.t('storefront.products.you_save', amount: savings_money.to_s, default: 'Kazancınız: %{amount}') %>
+                          </span>
+                        </div>
+                      <% else %>
+                        <div class="product-price text-3xl font-bold"><%= price.display_amount %></div>
+                      <% end %>
+                    </div>
+                  <% end %>
+
+                  <%# Product Features/Properties List %>
+                  <% if product_properties(product).any? %>
+                    <div class="mb-6 product-features">
+                      <ul class="space-y-2">
+                        <% product_properties(product).each do |product_property| %>
+                          <li><%= product_property.value %></li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  <% end %>
+
+                  <%# Variant Picker (Color & Size) %>
+                  <% section.blocks.each do |block| %>
+                    <% next unless block.class.name == 'Spree::PageBlocks::Products::VariantPicker' %>
+                    <div class="mb-6">
+                      <%= render 'spree/products/variant_picker', product: product, selected_variant: @selected_variant %>
+                    </div>
+                  <% end %>
+
+                  <%# Quantity Selector %>
+                  <% section.blocks.each do |block| %>
+                    <% next unless block.class.name == 'Spree::PageBlocks::Products::QuantitySelector' %>
+                    <div class="mb-6">
+                      <%= render 'spree/products/quantity_selector', product: product, selected_variant: @selected_variant %>
+                    </div>
+                  <% end %>
+
+                  <%# Add to Cart Button with Icons %>
+                  <% section.blocks.each do |block| %>
+                    <% next unless block.class.name == 'Spree::PageBlocks::Products::BuyButtons' %>
+                    <div class="mb-6" data-controller='sticky-button'>
+                      <div class="flex items-center gap-3">
+                        <div class="flex-1">
+                          <%= render 'spree/products/add_to_cart_button', product: product, selected_variant: @selected_variant, sticky_button_classes: "w-full" %>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <%= render 'spree/products/add_to_wishlist', variant: current_variant, css_classes: 'btn-icon btn--wishlist p-3 border border-gray-300 rounded hover:border-orange-500', icon_size: 24 %>
+                          <button type="button" class="btn-icon p-3 border border-gray-300 rounded hover:border-orange-500" title="<%= Spree.t('storefront.products.save', default: 'Kaydet') %>">
+                            <svg class="w-6 h-6 text-gray-600 hover:text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+
+                  <%# Shipping Information - Kargo Bilgileri %>
+                  <% 
+                    # Get available shipping methods for the product
+                    # First try to find shipping method matching product's shipping category
+                    shipping_method = nil
+                    
+                    if product.shipping_category_id.present?
+                      available_shipping_methods = Spree::ShippingMethod
+                        .where(display_on: [Spree::ShippingMethod::DISPLAY_ON_FRONT_END, Spree::ShippingMethod::DISPLAY_ON_BACK_END])
+                        .joins(:shipping_categories)
+                        .where(spree_shipping_categories: { id: product.shipping_category_id })
+                        .distinct
+                        .limit(1)
+                      
+                      shipping_method = available_shipping_methods.first
+                    end
+                    
+                    # If no method found, try to get any front-end shipping method
+                    if shipping_method.nil?
+                      shipping_method = Spree::ShippingMethod
+                        .where(display_on: Spree::ShippingMethod::DISPLAY_ON_FRONT_END)
+                        .first
+                    end
+                    
+                    # If still no method, try any shipping method
+                    if shipping_method.nil?
+                      shipping_method = Spree::ShippingMethod.first
+                    end
+                    
+                    if shipping_method
+                      # Calculate shipping date based on order time
+                      # Orders before 12:00 are shipped today, after 12:00 are shipped tomorrow
+                      # Sunday is not a shipping day, so move to Monday
+                      current_time = Time.current
+                      cutoff_hour = 12 # 12:00 cutoff time
+                      cutoff_minute = 0
+                      
+                      # Calculate cutoff time
+                      cutoff_time = Time.new(current_time.year, current_time.month, current_time.day, cutoff_hour, cutoff_minute, 0, current_time.utc_offset)
+                      
+                      # Determine base shipping date
+                      if current_time.hour < cutoff_hour || (current_time.hour == cutoff_hour && current_time.min < cutoff_minute)
+                        # Before 12:00 - ship today
+                        shipping_date = current_time.to_date
+                      else
+                        # After 12:00 - ship tomorrow, adjust cutoff_time to tomorrow
+                        shipping_date = current_time.to_date + 1.day
+                        cutoff_time = cutoff_time + 1.day
+                      end
+                      
+                      # Skip Sunday (Pazar) - move to Monday
+                      # Sunday = 0, Monday = 1, etc.
+                      while shipping_date.wday == 0 # Sunday
+                        shipping_date += 1.day
+                        cutoff_time += 1.day
+                      end
+                      
+                      # Format date in Turkish
+                      day_names = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi']
+                      month_names = ['', 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
+                      
+                      # Determine if today or tomorrow (after skipping Sunday)
+                      today = current_time.to_date
+                      tomorrow = today + 1.day
+                      
+                      # Determine shipping message - if shipping_date is not tomorrow (e.g., skipped Sunday), show actual date
+                      if shipping_date == today
+                        shipping_message = Spree.t('storefront.products.ship_today', default: 'Bugün kargoya verilir')
+                      elsif shipping_date == tomorrow
+                        shipping_message = Spree.t('storefront.products.ship_tomorrow', default: 'Yarın kargoya verilir')
+                      else
+                        # Show actual date (e.g., "Pazartesi kargoya verilir")
+                        formatted_date = "#{shipping_date.day} #{month_names[shipping_date.month]} #{day_names[shipping_date.wday]}"
+                        shipping_message = Spree.t('storefront.products.ship_on_date', date: formatted_date, default: '%{date} günü kargoya verilir')
+                      end
+                      
+                      # Get shipping cost
+                      shipping_cost = shipping_method.calculator&.preferences&.dig(:amount) || 0
+                      is_free = shipping_cost.to_f == 0
+                      
+                      # Delivery range text
+                      delivery_range = shipping_method.delivery_range
+                      delivery_text = delivery_range ? "#{delivery_range} iş günü" : "1-2 iş günü"
+                  %>
+                    <div class="mt-auto bg-white rounded-lg border border-gray-200 p-4">
+                      <h3 class="text-base font-bold text-gray-900 mb-3">
+                        <%= Spree.t('storefront.products.shipping_information', default: 'Kargo Bilgileri') %>
+                      </h3>
+                      <div class="border-t border-gray-200 pt-3">
+                        <div class="flex items-center gap-2 mb-2">
+                          <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                          </svg>
+                          <span class="text-sm font-bold text-gray-900">
+                            <%= shipping_method.name %>
+                            <% if is_free %>
+                              <span class="text-orange-600">• <%= Spree.t('storefront.products.free_shipping', default: 'Ücretsiz') %></span>
+                            <% end %>
+                          </span>
+                        </div>
+                        <div class="bg-gradient-to-r from-orange-50 to-orange-100 border-2 border-orange-300 rounded-lg p-3 mt-2 shadow-sm" 
+                             data-controller="shipping-countdown"
+                             data-shipping-countdown-cutoff-time-value="<%= cutoff_time.iso8601 %>"
+                             data-shipping-countdown-shipping-date-value="<%= shipping_date == today ? 'today' : 'tomorrow' %>"
+                             data-shipping-countdown-reload-url-value="<%= spree.product_path(product) %>">
+                          <div class="flex items-start gap-2">
+                            <div class="flex-shrink-0">
+                              <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                              </svg>
+                            </div>
+                            <div class="flex-1">
+                              <p class="text-sm font-bold text-orange-900 mb-1.5">
+                                <%= Spree.t('storefront.products.fast_shipping', default: '⚡ Hızlı Kargo Fırsatı') %>
+                              </p>
+                              <div class="flex items-center gap-2 mb-1.5">
+                                <span class="text-xs font-semibold text-orange-800">
+                                  <%= Spree.t('storefront.products.order_within', default: 'Sipariş verirseniz') %>
+                                </span>
+                                <div class="flex items-center gap-0.5 bg-white px-2 py-1 rounded border border-orange-300 shadow-sm">
+                                  <span data-shipping-countdown-target="hours" class="text-sm font-bold text-orange-600 tabular-nums">00</span>
+                                  <span class="text-xs text-orange-600" data-shipping-countdown-target="separator1">:</span>
+                                  <span data-shipping-countdown-target="minutes" class="text-sm font-bold text-orange-600 tabular-nums">00</span>
+                                  <span class="text-xs text-orange-600" data-shipping-countdown-target="separator2">:</span>
+                                  <span data-shipping-countdown-target="seconds" class="text-sm font-bold text-orange-600 tabular-nums">00</span>
+                                </div>
+                              </div>
+                              <p class="text-xs font-bold text-orange-900">
+                                <%= shipping_message %>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div data-controller="modal" 
+                             data-modal-allow-background-close="true"
+                             data-modal-background-color-value="rgba(0,0,0,0.5)">
+                          <button type="button" 
+                                  class="mt-3 inline-flex items-center text-xs font-medium text-gray-900 hover:text-orange-500 transition-colors"
+                                  data-action="click->modal#open">
+                            <%= Spree.t('storefront.products.view_all_details', default: 'Tüm Detayları Gör') %>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                          </button>
+                          
+                          <%# Shipping Details Modal %>
+                          <div data-modal-target="container"
+                               data-action="click->modal#closeBackground keyup@window->modal#closeWithKeyboard"
+                               class="hidden fixed inset-0 overflow-y-auto flex items-center justify-center z-[9999]"
+                               style="background-color: rgba(0,0,0,0.5);">
+                            <div class="w-full max-w-md relative bg-white rounded-lg shadow-xl mx-4 my-8" 
+                                 onclick="event.stopPropagation()">
+                              <button type="button"
+                                      class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
+                                      data-action="click->modal#close">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                              </button>
+                              
+                              <div class="p-6">
+                                <h3 class="text-lg font-bold text-gray-900 mb-6 pr-8">
+                                  <%= Spree.t('storefront.products.delivery_information', default: 'Teslimat Bilgisi') %>
+                                </h3>
+                                
+                                <div class="space-y-5">
+                                  <div class="pb-4 border-b border-gray-200">
+                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                                      <%= Spree.t('storefront.products.shipping_fee', default: 'Kargo Ücreti') %>
+                                    </p>
+                                    <p class="text-base font-bold text-gray-900">
+                                      <% if is_free %>
+                                        <%= Spree.t('storefront.products.free_shipping', default: 'Ücretsiz Kargo') %>
+                                      <% else %>
+                                        <%= shipping_cost > 0 ? Spree::Money.new(shipping_cost, currency: current_currency).to_s : Spree.t('storefront.products.free_shipping', default: 'Ücretsiz Kargo') %>
+                                      <% end %>
+                                    </p>
+                                  </div>
+                                  
+                                  <div class="pb-4 border-b border-gray-200">
+                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                                      <%= Spree.t('storefront.products.shipping_company', default: 'Kargo Şirketi') %>
+                                    </p>
+                                    <p class="text-base font-bold text-gray-900">
+                                      <%= shipping_method.name %>
+                                    </p>
+                                  </div>
+                                  
+                                  <div class="pb-4 border-b border-gray-200">
+                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                                      <%= Spree.t('storefront.products.shipping_date_label', default: 'Kargoya Verileceği Tarih') %>
+                                    </p>
+                                    <p class="text-base font-bold text-gray-900">
+                                      <%= shipping_message %>
+                                    </p>
+                                  </div>
+                                  
+                                  <div>
+                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                                      <%= Spree.t('storefront.products.shipping_province', default: 'Kargoya Verileceği İl') %>
+                                    </p>
+                                    <p class="text-base font-bold text-gray-900">
+                                      Ordu
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                  <button type="button"
+                                          class="w-full spree-button-primary"
+                                          data-action="click->modal#close">
+                                    <%= Spree.t('storefront.products.close', default: 'Kapat') %>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% else %>
+                    <div class="mt-auto bg-white rounded-lg border border-gray-200 p-4">
+                      <h3 class="text-base font-bold text-gray-900 mb-3">
+                        <%= Spree.t('storefront.products.shipping_information', default: 'Kargo Bilgileri') %>
+                      </h3>
+                      <div class="border-t border-gray-200 pt-3">
+                        <p class="text-sm text-gray-600">
+                          <%= Spree.t('storefront.products.shipping_info_unavailable', default: 'Kargo bilgisi mevcut değil.') %>
+                        </p>
+                      </div>
+                    </div>
+                  <% end %>
+
+                </div>
+              <% end %>
+
+              <%= render 'spree/products/add_to_waitlist', variant: current_variant if show_waitlist_modal %>
+            </div>
+          </div>
+        </div>
+        
+        <%# Product Description and Product Info - Tabs below images and product details, full width %>
+        <div class="mt-8 lg:mt-12 w-full" data-controller="tabs">
+          <% description_block = section.blocks.find { |b| b.class.name == 'Spree::PageBlocks::Products::Description' } %>
+          <% has_description = description_block && product.storefront_description.present? %>
+          <% has_product_info = true %>
+          
+          <% if has_description || has_product_info %>
+            <%# Tabs Navigation %>
+            <div class="border-b border-gray-200 mb-6">
+              <nav class="flex space-x-8" aria-label="Tabs">
+                <% if has_description %>
+                  <button
+                    type="button"
+                    data-tabs-target="tab"
+                    data-tab-id="description"
+                    data-action="click->tabs#switchTab"
+                    class="border-b-2 border-orange-500 text-orange-600 font-semibold py-4 px-1 text-sm whitespace-nowrap">
+                    <%= Spree.t('storefront.products.description', default: 'Açıklama') %>
+                  </button>
+                <% end %>
+                <% if has_product_info %>
+                  <button
+                    type="button"
+                    data-tabs-target="tab"
+                    data-tab-id="product-info"
+                    data-action="click->tabs#switchTab"
+                    class="border-b-2 border-transparent text-gray-600 font-medium py-4 px-1 text-sm whitespace-nowrap hover:text-gray-900 hover:border-gray-300">
+                    <%= Spree.t('storefront.products.product_information', default: 'Ürün Bilgileri') %>
+                  </button>
+                <% end %>
+              </nav>
+            </div>
+
+            <%# Tab Contents %>
+            <div class="w-full">
+              <% if has_description %>
+                <div
+                  data-tabs-target="content"
+                  data-tab-content="description"
+                  class="product-tab-content">
+                  <%= render 'spree/products/description', product: product, block: description_block, section: section %>
+                </div>
+                
+                <%# Separator after description %>
+                <% if has_product_info %>
+                  <div class="my-8 border-t border-gray-200"></div>
+                <% end %>
+              <% end %>
+
+              <% if has_product_info %>
+                <div
+                  data-tabs-target="content"
+                  data-tab-content="product-info"
+                  class="product-tab-content hidden">
+                  <div class="space-y-6">
+                    <%# Product Information Table %>
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                      <div class="p-4 bg-gray-50 border-b border-gray-200">
+                        <h3 class="text-sm font-semibold text-gray-900">
+                          <%= Spree.t('storefront.products.product_information', default: 'Ürün Bilgileri') %>
+                        </h3>
+                      </div>
+                      <div class="p-4 space-y-3 text-sm">
+                        <% if product.respond_to?(:gender) && product.gender.present? %>
+                          <div class="flex justify-between py-2 border-b border-gray-100">
+                            <span class="text-gray-600"><%= Spree.t('storefront.products.gender', default: 'Cinsiyet') %>:</span>
+                            <span class="text-gray-900 font-medium"><%= product.gender %></span>
+                          </div>
+                        <% end %>
+                        <% if product.taxons.any? %>
+                          <div class="flex justify-between py-2 border-b border-gray-100">
+                            <span class="text-gray-600"><%= Spree.t('storefront.products.product_type', default: 'Ürün Tipi') %>:</span>
+                            <span class="text-gray-900 font-medium"><%= product.taxons.first.name.truncate(20) %></span>
+                          </div>
+                        <% end %>
+                        <% if current_variant && current_variant.total_on_hand.present? %>
+                          <div class="flex justify-between py-2 border-b border-gray-100">
+                            <span class="text-gray-600"><%= Spree.t('storefront.products.stock_quantity', default: 'Stok Adedi') %>:</span>
+                            <span class="text-gray-900 font-medium">
+                              <% if current_variant.total_on_hand < 5 %>
+                                <%= Spree.t('storefront.products.less_than_5', default: '5 adetten az') %>
+                              <% else %>
+                                <%= current_variant.total_on_hand %> <%= Spree.t('storefront.products.items', default: 'adet') %>
+                              <% end %>
+                            </span>
+                          </div>
+                        <% end %>
+                        <%# Garanti Süresi - Metafield'dan çekiliyor %>
+                        <% warranty_metafield = product.get_metafield('warranty.duration') || product.get_metafield('product.warranty') || product.get_metafield('custom.warranty') %>
+                        <% if warranty_metafield.present? && warranty_metafield.value.present? %>
+                          <div class="flex justify-between py-2 border-b border-gray-100">
+                            <span class="text-gray-600"><%= Spree.t('storefront.products.warranty', default: 'Garanti Süresi') %>:</span>
+                            <span class="text-gray-900 font-medium">
+                              <%= warranty_metafield.value %>
+                              <% unless warranty_metafield.value.match?(/\d+\s*(ay|yıl|month|year)/i) %>
+                                <%= Spree.t('storefront.products.months', default: 'Ay') %>
+                              <% end %>
+                            </span>
+                          </div>
+                        <% end %>
+                      </div>
+                    </div>
+
+                    <%# Additional Product Properties %>
+                    <% fit_features = product.property('fit_features') || product.property('fit_and_features') %>
+                    <% fabric = product.property('fabric') %>
+                    <% materials_care = product.property('materials_care') || product.property('care_instructions') %>
+                    
+                    <% if fit_features.present? %>
+                      <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <div class="p-4 bg-gray-50 border-b border-gray-200">
+                          <h3 class="text-sm font-semibold text-gray-900">
+                            <%= Spree.t('storefront.products.fit_features', default: 'FIT & FEATURES') %>
+                          </h3>
+                        </div>
+                        <div class="p-4 text-sm text-gray-700 leading-relaxed">
+                          <%= simple_format(fit_features) %>
+                        </div>
+                      </div>
+                    <% end %>
+
+                    <% if fabric.present? %>
+                      <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <div class="p-4 bg-gray-50 border-b border-gray-200">
+                          <h3 class="text-sm font-semibold text-gray-900">
+                            <%= Spree.t('storefront.products.fabric', default: 'FABRIC') %>
+                          </h3>
+                        </div>
+                        <div class="p-4 text-sm text-gray-700 leading-relaxed">
+                          <%= simple_format(fabric) %>
+                        </div>
+                      </div>
+                    <% end %>
+
+                    <% if materials_care.present? %>
+                      <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <div class="p-4 bg-gray-50 border-b border-gray-200">
+                          <h3 class="text-sm font-semibold text-gray-900">
+                            <%= Spree.t('storefront.products.materials_care', default: 'MATERIALS & CARE') %>
+                          </h3>
+                        </div>
+                        <div class="p-4 text-sm text-gray-700 leading-relaxed">
+                          <%= simple_format(materials_care) %>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <%# Reviews Section - Below tabs, always visible %>
+        <div class="mt-12 w-full">
+          <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">
+              <%= Spree.t('storefront.reviews.title', default: 'Değerlendirmeler') %>
+            </h2>
+            <% if product.reviews_count > 0 %>
+              <p class="text-sm text-gray-600">
+                <%= product.reviews_count %> <%= Spree.t('storefront.reviews.reviews', default: 'değerlendirme') %>
+              </p>
+            <% end %>
+          </div>
+          <%= render 'spree/products/reviews', product: product %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= render 'spree/products/json_ld', product: product, selected_variant: @selected_variant %>
+</turbo-frame>

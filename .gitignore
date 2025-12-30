@@ -32,6 +32,13 @@ public/attachments
 public/blank_iframe.html
 public/ckeditora
 sandbox/*
+# Exception: One Rides theme should be tracked
+!sandbox/app/
+!sandbox/app/views/
+!sandbox/app/views/themes/
+!sandbox/app/views/themes/one_rides/
+!sandbox/Gemfile
+!sandbox/config/
 spree/*
 spree_dev
 spree_test

@@ -1,0 +1,141 @@
+<% cache_unless page_builder_enabled?, [spree_storefront_base_cache_scope.call(section), request.path] do %>
+  <% layout = section.preferred_layout %>
+  <header
+    class='header-<%= layout %>'
+    data-controller='header toggle-menu slideover <%= "slideover-account" if show_account_pane? %>'
+    data-toggle-menu-class='hamburger-visible'
+    data-slideover-invisible-class='translate-x-full,opacity-0'
+    data-slideover-visible-class='translate-x-0,opacity-100'
+    data-slideover-active-target='#slideover-cart'
+    data-slideover-account-invisible-class='translate-x-full,opacity-0'
+    data-slideover-account-visible-class='translate-x-0,opacity-100'
+    data-slideover-account-active-target='#slideover-account'
+  >
+    <nav
+      aria-label='Top'
+      style="<%= section_styles(section) %>"
+      class="relative transition-transform duration-300">
+      <div class='page-container'>
+        <!-- Üst satır: Hamburger (Mobil), Logo, Arama, İkonlar -->
+        <div class='flex items-center justify-between py-4'>
+          <!-- Sol taraf: Mobile menu toggle (sadece mobilde) -->
+          <div class='flex items-center gap-3 lg:hidden'>
+            <button
+              type='button'
+              data-action='click->toggle-menu#toggle touch->toggle-menu#toggle'
+              class='relative w-6'
+              data-toggle-menu-target='button'
+              >
+              <span class='sr-only'><%= Spree.t(:toggle_menu) %></span>
+              <div class='absolute top-0'>
+                <%= render 'spree/shared/icons/menu', color: section.preferred_text_color %>
+              </div>
+              <div class='absolute top-0 opacity-0'>
+                <%= render 'spree/shared/icons/close', color: section.preferred_text_color %>
+              </div>
+            </button>
+          </div>
+          
+          <!-- Logo -->
+          <div class='flex-shrink-0 flex-1 lg:flex-shrink-0 lg:flex-none' id='header-logo'>
+            <div class='flex w-full lg:w-auto' id='header-logo-inner'>
+              <%= render 'spree/shared/logo', logo: section.logo, height: section.preferred_desktop_logo_height, logo_css: 'lg:!ml-0' %>
+            </div>
+          </div>
+          
+          <!-- Arama (Ortada, sadece desktop) -->
+          <div class='hidden lg:flex flex-1 justify-center px-8'>
+            <div class='w-full max-w-2xl relative' 
+                 data-controller="search-suggestions" 
+                 data-search-suggestions-url-value="<%= spree.search_suggestions_path %>">
+              <%= form_with url: spree.search_path, method: :get, local: true, class: 'relative w-full' do %>
+                <div class='relative flex items-center'>
+                  <button type='submit' class='absolute right-3 text-gray-400 hover:text-gray-600 z-10'>
+                    <%= render 'spree/shared/icons/search', color: section.preferred_text_color %>
+                    <span class='sr-only'><%= Spree.t(:search) %></span>
+                  </button>
+                  <%= text_field_tag :q, params[:q], 
+                      class: 'w-full pl-4 pr-12 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-900 placeholder-gray-400',
+                      placeholder: Spree.t(:search),
+                      data: { search_suggestions_target: 'input' } %>
+                </div>
+              <% end %>
+              
+              <!-- Öneriler Dropdown -->
+              <div id="search-suggestions-dropdown" 
+                   class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+                <div id="search-suggestions-content" class="p-4"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sağ taraf: İkonlar -->
+          <div class='flex items-center gap-3 lg:gap-4 flex-shrink-0'>
+            <!-- Desktop Account -->
+            <div class='hidden lg:flex'>
+              <% if show_account_pane? %>
+                <button
+                  data-action='click->slideover-account#toggle click@window->slideover-account#hide'
+                  >
+                  <%= render 'spree/shared/icons/account', color: section.preferred_text_color, section: section %>
+                </button>
+              <% else %>
+                <%= link_to spree.account_path do %>
+                  <%= render 'spree/shared/icons/account', color: section.preferred_text_color, section: section %>
+                <% end %>
+              <% end %>
+            </div>
+            <% if show_account_pane? %>
+              <%= form_with url: spree.account_wishlist_path, method: :get, data: { turbo_stream: true } do %>
+                <button
+                  type="submit"
+                  id="wishlist-icon"
+                  class="flex items-end">
+                  <%= render 'spree/shared/wishlist_icon', wishlist: current_wishlist, background_color: section.preferred_background_color %>
+                </button>
+              <% end %>
+            <% else %>
+              <%= link_to spree.account_wishlist_path, id: "wishlist-icon" do %>
+                <%= render 'spree/shared/wishlist_icon', background_color: section.preferred_background_color %>
+              <% end %>
+            <% end %>
+            <!-- Cart -->
+            <div
+              data-action='click->toggle-menu#hide touch->toggle-menu#hide'
+              >
+              <%= render 'spree/shared/cart_icon' %>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Alt satır: Navigation Menü -->
+        <div class='hidden lg:flex flex-col items-start bg-white border-t border-gray-200 relative' style='padding: 0 !important; margin: 0 !important; width: 100%;'>
+          <div class='flex items-center gap-0 w-full' id='header-nav-menu' style='margin: 0; padding: 0;'>
+            <%= render 'spree/page_sections/nav/desktop', section: section %>
+          </div>
+          <!-- Separator - Menünün tam altında -->
+          <div style='width: 100%; height: 3px; background-color: #ff6600; margin: 0 !important; padding: 0 !important; display: block;'></div>
+        </div>
+      </div>
+    </nav>
+    <div
+        class='h-0 opacity-0 pointer-events-none hide-on-load'
+        data-toggle-menu-target='toggleable'
+        role='dialog'
+        aria-modal='true'
+      >
+        <div
+          class='flex justify-between flex-col lg:hidden w-full transition-transform has-[.currency-and-locale-modal:not(.hidden)]:transform-none body header--mobile-menu'
+          data-toggle-menu-target='content'
+          style='background-color: <%= section.preferred_background_color %>; height: calc(100dvh - 58px - 36px);'
+          >
+          <%= render 'spree/page_sections/nav/mobile', section: section %>
+        </div>
+      </div>
+
+    <%= render 'spree/shared/cart_pane', section: section %>
+    <% if show_account_pane? %>
+      <%= render 'spree/shared/account_pane', section: section %>
+    <% end %>
+  </header>
+<% end %>

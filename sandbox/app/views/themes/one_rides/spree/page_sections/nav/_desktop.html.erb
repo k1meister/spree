@@ -1,0 +1,59 @@
+<% if section.blocks.any? %>
+  <% section.blocks.includes(:links).each do |block| %>
+    <% presenter = Spree::MegaNavPresenter.new(block) %>
+    <% main_link = presenter.main_link %>
+    <% next unless main_link.present? %>
+    
+    <div class="nav-item-wrapper" data-nav-item>
+      <%= active_link_to spree_storefront_resource_url(main_link.linkable || main_link),
+          active: main_link.linkable.present? && main_link.linkable.is_a?(Spree::Pages::Homepage) ? :exclusive : :inclusive,
+          data: { title: main_link.label.downcase.strip },
+          class: "shrink-0 menu-item header--nav-link px-3 py-2 text-black hover:text-gray-900 transition-colors inline-block",
+          class_active: "menu-item--active text-black font-medium",
+          target: main_link.open_in_new_tab.presence && "_blank",
+          rel: main_link.open_in_new_tab.presence && "noopener noreferrer" do %>
+        <span><%= main_link.label %></span>
+      <% end %>
+      
+      <% if presenter.columns.any? %>
+        <div class="dropdown-menu" data-dropdown>
+          <div class="bg-white border-b border-gray-200 shadow-lg">
+            <div class="page-container py-6">
+              <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); justify-items: start;">
+                <% presenter.columns.each do |column| %>
+                  <%= link_to spree_storefront_resource_url(column.view_all_linkable), class: "category-item" do %>
+                    <% if column.view_all_linkable.is_a?(Spree::Taxon) && column.view_all_linkable.image.attached? && column.view_all_linkable.image.variable? %>
+                      <div class="category-image">
+                        <%= spree_image_tag(column.view_all_linkable.image, width: 80, height: 80, class: 'w-full h-full object-cover category-image-inner', loading: :lazy, alt: column.title) %>
+                      </div>
+                    <% else %>
+                      <div class="category-image category-placeholder">
+                        <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                    <% end %>
+                    <span class="category-name"><%= column.title %></span>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% else %>
+  <% section.links.each do |link| %>
+    <%= active_link_to spree_storefront_resource_url(link.linkable || link),
+        active: link.linkable.present? && link.linkable.is_a?(Spree::Pages::Homepage) ? :exclusive : :inclusive,
+        data: { title: link.label.downcase.strip },
+        class: "shrink-0 menu-item header--nav-link px-3 py-2 text-black hover:text-gray-900 transition-colors focus:mx-0 focus:px-3",
+        class_active: "menu-item--active text-black font-medium",
+        target: link.open_in_new_tab.presence && "_blank",
+        rel: link.open_in_new_tab.presence && "noopener noreferrer",
+        **link_attributes(link, as_html: false) do %>
+      <span><%= link.label %></span>
+    <% end %>
+  <% end %>
+<% end %>
